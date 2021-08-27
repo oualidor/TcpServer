@@ -19,11 +19,10 @@ let server = net.createServer(connection => {
             return; // prevents other code from running
         }
 
+
         console.log(data.toString('hex'))
-        //accept login
-        console.log(data.toString('hex'))
-        let buf = Buffer.from('00086001011122334401', 'hex');
-        connection.write(buf)
+        answerLogin(data.toString('hex'))
+
 
 
 
@@ -42,3 +41,18 @@ server.listen(port, host, () => {
 
     console.log("waiting for a connection"); // prints on start
 });
+
+
+function answerLogin(connection, data){
+    let buf
+    switch (data){
+        case "0020600188112233445566778802330011524c334830383230303736383031323100":  //login
+            buf = Buffer.from('00086001011122334401', 'hex');
+            connection.write(buf)
+            break;
+        case "0007 61 01 00 11223344": //heartBit
+            buf = Buffer.from('0007 61 01 00 11223344', 'hex');
+            connection.write(buf)
+            break;
+    }
+}
