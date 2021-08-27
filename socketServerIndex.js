@@ -18,7 +18,10 @@ let server = net.createServer(connection => {
             console.log("data length 0")
             return; // prevents other code from running
         }
+
         console.log(data.toString())
+        connection.write('0008 60 01 01 11223344 01')
+
 
     });
 });
