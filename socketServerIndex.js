@@ -22,3 +22,11 @@ let server = net.createServer(connection => {
 
     });
 });
+
+
+let port = 4000
+let host = '164.132.59.129'
+server.listen(port, host, () => {
+
+    console.log("waiting for a connection"); // prints on start
+});
