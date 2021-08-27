@@ -38,4 +38,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+app.listen(4000, () => {
+  console.log(`Sez back end runing on  4000.`)
+});

@@ -45,7 +45,7 @@ let server = net.createServer(connection => {
 
 
 // look for a connection on port 50,000
-server.listen(50000, () => {
+server.listen(3001, "", () => {
     let address = server.address();
     console.log("server running on " + address)
     console.log("waiting for a connection"); // prints on start
