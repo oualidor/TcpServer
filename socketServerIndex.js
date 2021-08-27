@@ -19,8 +19,17 @@ let server = net.createServer(connection => {
             return; // prevents other code from running
         }
 
-        console.log(data.toString())
-        connection.write('0008 60 01 01 11223344 01')
+        console.log(data.toString('hex'))
+        //accept login
+        console.log(data.toString('hex'))
+        let buf = Buffer.from('00086001011122334401', 'hex');
+        connection.write(buf)
+
+
+
+        buf = Buffer.from('000880018a1122334403', 'hex');
+        connection.write(buf)
+        //eject power bank
 
 
     });
