@@ -19,5 +19,5 @@ function RequestOperations(data){
     }
 }
 
-module.exports = {cmdExtractor: CmdExtractor, RequestClassifier: RequestOperations}
+module.exports = { CmdExtractor, RequestClassifier: RequestOperations}
 

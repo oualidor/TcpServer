@@ -1,5 +1,5 @@
 const  LoginRequest  =  require("./Structures/LoginRequest")
-const CmdExtractor = require("./Apis/RequestOperations");
+const RequestOperations = require("./Apis/RequestOperations");
 const CMDs =  require("./Apis/CMDs");
 
 const net = require("net"); // import net
@@ -40,7 +40,7 @@ server.listen(port, host, () => {
 
 function answerRequest(connection, data){
     let buf
-    let cmd = CmdExtractor(data)
+    let cmd = RequestOperations.CmdExtractor(data)
     if(cmd != undefined){
         console.log(cmd + " request entered, trying to answer")
         switch (cmd){
