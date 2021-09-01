@@ -1,14 +1,16 @@
+
 const  LoginRequest  =  require("./Structures/LoginRequest")
 const RequestOperations = require("./Apis/RequestOperations");
 const CMDs =  require("./Apis/CMDs");
 
 const net = require("net"); // import net
-
+let currentConnections = []
 // create the server
 let server = net.createServer(connection => {
     // run all of this when a client connects
+    let allowed = false;
     console.log("Station connected ");
-
+    currentConnections.push(connection)
     connection.on("data", data => {
         // run this when data is received
         if (data == undefined || data == null) {
@@ -27,6 +29,11 @@ let server = net.createServer(connection => {
 
 
     });
+    connection.on("end", ()=>{
+        console.log("client disconnected")
+
+        
+    })
 });
 
 
@@ -37,6 +44,10 @@ server.listen(port, host, () => {
 
     console.log("waiting for a connection"); // prints on start
 });
+
+server.on("end", ()=>{
+    console.log("closed")
+} )
 
 
 function answerRequest(connection, data){
@@ -56,7 +67,6 @@ function answerRequest(connection, data){
     }
 }
 
-
 function answerLogin(connection, buf, request){
     buf = Buffer.from('00086001011122334401', 'hex');
     connection.write(buf)
@@ -66,3 +76,23 @@ function answerHeartBit(connection, buf, request){
     buf = Buffer.from('000761010011223344', 'hex');
     connection.write(buf)
 }
+
+function sendData(connection, dataString, encoding){
+    let buf = Buffer.from(dataString, 'hex');
+    connection.write(buf)
+}
+
+
+let app = require("./app")
+
+
+app.listen(4001, () => {
+    console.log(`Sez back end runing on  4000.`)
+});
+app.get("/", (req, res)=>{
+    res.send("running")
+})
+app.get("/rent", (req, res)=>{
+    sendData(currentConnections[0], "000865018a1122334400", null)
+    res.send("done")
+})
