@@ -11,5 +11,5 @@ const LoginRequest = (data) => {
 
 }
 
-export default LoginRequest
+module.exports = {LoginRequest}
 

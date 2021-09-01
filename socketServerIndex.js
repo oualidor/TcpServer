@@ -1,6 +1,6 @@
-import LoginRequest from "./Structures/LoginRequest";
-import CmdExtractor from "./Apis/RequestOperations";
-import CMDs from "./Apis/CMDs";
+const  LoginRequest  =  require("./Structures/LoginRequest")
+const CmdExtractor = require("./Apis/RequestOperations");
+const CMDs =  require("./Apis/CMDs");
 
 const net = require("net"); // import net
 

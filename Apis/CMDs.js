@@ -8,5 +8,5 @@ const CMDS = {
     ReturnPowerBank : "66",
 }
 
-export default  CMDS
+module.exports = {CMDS}
 

@@ -1,4 +1,4 @@
-import LoginRequest from "../Structures/LoginRequest";
+const LoginRequest = require( "../Structures/LoginRequest");
 
 const CMDs = require("./CMDs")
 function CmdExtractor(data){
