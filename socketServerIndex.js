@@ -55,6 +55,7 @@ function answerRequest(connection, data){
     let cmd = RequestOperations.CmdExtractor(data)
     if(cmd != undefined){
         console.log(cmd + " request entered, trying to answer")
+        console.log(data)
         switch (cmd){
             case CMDs.login:
                 let request =  LoginRequest.LoginRequest(data)
