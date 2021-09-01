@@ -66,6 +66,9 @@ function answerRequest(connection, data){
             case CMDs.RentPowerBank:
                 getRentAnswer(data)
                 break
+            case CMDs.ReturnPowerBank:
+                answerPowerBankReturn(connection, buf, null)
+                break
         }
     }
 }
@@ -80,6 +83,10 @@ function answerHeartBit(connection, buf, request){
     connection.write(buf)
 }
 
+function answerPowerBankReturn(connection, buf, request){
+    buf = Buffer.from('00096601fa112233440001', 'hex');
+    connection.write(buf)
+}
 function getRentAnswer(data){
     console.log(data)
 }
