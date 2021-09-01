@@ -10,8 +10,8 @@ function RequestOperations(data){
     let cmd = CmdExtractor(data)
     if(cmd != undefined){
         switch (cmd){
-            case CMDs.login:
-                return LoginRequest(data)
+            case CMDs:
+                return LoginRequest.LoginRequest(data)
             break
             case CMDs.heartBit:
                 return "hihihi"
