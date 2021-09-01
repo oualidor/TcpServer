@@ -23,7 +23,7 @@ let server = net.createServer(connection => {
         }
 
         data = data.toString('hex')
-        answerRequest(data.toString('hex'))
+        answerRequest(connection, data)
 
 
     });
@@ -31,6 +31,7 @@ let server = net.createServer(connection => {
 
 
 let port = 4000
+//let host = 'localhost'
 let host = '164.132.59.129'
 server.listen(port, host, () => {
 
@@ -45,7 +46,7 @@ function answerRequest(connection, data){
         console.log(cmd + " request entered, trying to answer")
         switch (cmd){
             case CMDs.login:
-                let request =  LoginRequest(data)
+                let request =  LoginRequest.LoginRequest(data)
                 answerLogin(connection, buf, request)
                 break
             case CMDs.heartBit:
