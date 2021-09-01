@@ -80,19 +80,25 @@ function answerHeartBit(connection, buf, request){
 function sendData(connection, dataString, encoding){
     let buf = Buffer.from(dataString, 'hex');
     connection.write(buf)
+    connection.on("data", (data)=>{
+        data = data.toString('hex')
+        console.log("aswer from client")
+        console.log("///////////" + data)
+    })
+
 }
 
 
 let app = require("./app")
 
 
-app.listen(4001, () => {
-    console.log(`Sez back end runing on  4000.`)
+app.listen(3000, () => {
+    console.log(`Sez back end runing on  3000.`)
 });
 app.get("/", (req, res)=>{
     res.send("running")
 })
-app.get("/rent", (req, res)=>{
-    sendData(currentConnections[0], "000865018a1122334400", null)
+app.get("/rent", async (req, res)=>{
+    await sendData(currentConnections[0], "000865018a1122334400", null)
     res.send("done")
 })
