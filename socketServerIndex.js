@@ -63,6 +63,9 @@ function answerRequest(connection, data){
             case CMDs.heartBit:
                 answerHeartBit(connection, buf, null)
                 break
+            case CMDs.RentPowerBank:
+                getRentAnswer(data)
+                break
         }
     }
 }
@@ -77,15 +80,13 @@ function answerHeartBit(connection, buf, request){
     connection.write(buf)
 }
 
+function getRentAnswer(data){
+    console.log(data)
+}
+
 function sendData(connection, dataString, encoding){
     let buf = Buffer.from(dataString, 'hex');
     connection.write(buf)
-    connection.on("data", (data)=>{
-        data = data.toString('hex')
-        console.log("aswer from client")
-        console.log("///////////" + data)
-    })
-
 }
 
 
@@ -100,5 +101,5 @@ app.get("/", (req, res)=>{
 })
 app.get("/rent", async (req, res)=>{
     await sendData(currentConnections[0], "000865018a1122334400", null)
-    res.send("done")
+    res.send("request sent")
 })
