@@ -1,3 +1,6 @@
+import LoginRequest from "./Structures/LoginRequest";
+import CmdExtractor from "./Apis/RequestOperations";
+import CMDs from "./Apis/CMDs";
 
 const net = require("net"); // import net
 
@@ -19,16 +22,8 @@ let server = net.createServer(connection => {
             return; // prevents other code from running
         }
 
-
-        console.log(data.toString('hex'))
-        answerLogin(data.toString('hex'))
-
-
-
-
-        buf = Buffer.from('000880018a1122334403', 'hex');
-        connection.write(buf)
-        //eject power bank
+        data = data.toString('hex')
+        answerRequest(data.toString('hex'))
 
 
     });
@@ -43,16 +38,30 @@ server.listen(port, host, () => {
 });
 
 
-function answerLogin(connection, data){
+function answerRequest(connection, data){
     let buf
-    switch (data){
-        case "0020600188112233445566778802330011524c334830383230303736383031323100":  //login
-            buf = Buffer.from('00086001011122334401', 'hex');
-            connection.write(buf)
-            break;
-        case "0007 61 01 00 11223344": //heartBit
-            buf = Buffer.from('0007 61 01 00 11223344', 'hex');
-            connection.write(buf)
-            break;
+    let cmd = CmdExtractor(data)
+    if(cmd != undefined){
+        console.log(cmd + " request entered, trying to answer")
+        switch (cmd){
+            case CMDs.login:
+                let request =  LoginRequest(data)
+                answerLogin(connection, buf, request)
+                break
+            case CMDs.heartBit:
+                answerHeartBit(connection, buf, null)
+                break
+        }
     }
+}
+
+
+function answerLogin(connection, buf, request){
+    buf = Buffer.from('00086001011122334401', 'hex');
+    connection.write(buf)
+}
+
+function answerHeartBit(connection, buf, request){
+    buf = Buffer.from('000761010011223344', 'hex');
+    connection.write(buf)
 }
