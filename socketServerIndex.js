@@ -41,7 +41,6 @@ let port = 4000
 //let host = 'localhost'
 let host = '164.132.59.129'
 server.listen(port, host, () => {
-
     console.log("waiting for a connection"); // prints on start
 });
 
@@ -88,13 +87,15 @@ function answerPowerBankReturn(connection, buf, request){
     buf = Buffer.from('00096601fa112233440001', 'hex');
     connection.write(buf)
 }
+
 function getRentAnswer(data){
     console.log(data)
 }
 
 function sendData(connection, dataString, encoding){
     let buf = Buffer.from(dataString, 'hex');
-    connection.write(buf)
+    if(connection.write(buf)) return true
+    return false
 }
 
 
@@ -108,6 +109,9 @@ app.get("/", (req, res)=>{
     res.send("running")
 })
 app.get("/rent", async (req, res)=>{
-    await sendData(currentConnections[0], "000865018a1122334400", null)
-    res.send("request sent")
+    if (await sendData(currentConnections[0], "000865018a1122334400", null)){
+        res.send("request sent")
+    }else {
+        res.send("wrong")
+    }
 })
