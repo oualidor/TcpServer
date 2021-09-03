@@ -8,7 +8,13 @@ function hexToString(str1) {
 }
 
 
+function stringToHex(str){
+    const bufferText = Buffer.from(str, 'utf8');
 
-module.exports = {hexToString}
+    const text = bufferText.toString('hex');
+    return text
+}
+
+module.exports = {hexToString, stringToHex}
 
 

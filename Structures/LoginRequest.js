@@ -9,7 +9,7 @@ const LoginRequest = (data) => {
         boxId: Converter.hexToString(data.substr(32, this.boxIdLength))
     })
 
-}
+};
 
-module.exports = {LoginRequest}
 
+module.exports = { LoginRequest }

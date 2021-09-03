@@ -18,6 +18,19 @@ function RequestOperations(data){
         }
     }
 }
+async function connectionToClient(clientsList, connection) {
+    if ((clientsList == undefined) || (clientsList.length == 0)) return false
+    let found = false;
+    let position = undefined
+    await clientsList.map((con, index) => {
+        if ((con.boxId == connection.boxId)) {
+            found = true;
+            position = index
+        }
+    })
+    if (!found) return false
+    return clientsList[position]
+}
 
-module.exports = { CmdExtractor, RequestClassifier: RequestOperations}
+module.exports = { CmdExtractor,  RequestOperations, connectionToClient}
 
