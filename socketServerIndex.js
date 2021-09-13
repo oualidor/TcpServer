@@ -12,28 +12,34 @@ let server = net.createServer(connection => {
     console.log("Station connected ");
 
     connection.on("data", data => {
-        // run this when data is received
-        if (data == undefined || data == null) {
-            console.log("no data found")
-        }
-
-        const dataArgs = data.toString().split(" "); // splits the data into spaces
-
-        if (dataArgs.length === 0) { // in case there is no command
-            console.log("data length 0")
-            return; // prevents other code from running
-        }
-
-
-        data = data.toString('hex')
-        answerRequest(connection, data)
-
-
+        NormalDataEvent(connection, data)
     });
     connection.on("end", ()=>{
         console.log("client disconnected")
     })
 });
+
+
+function NormalDataEvent(connection, data){
+    // run this when data is received
+    if (data == undefined || data == null) {
+        console.log("no data found")
+    }
+
+    const dataArgs = data.toString().split(" "); // splits the data into spaces
+
+    if (dataArgs.length === 0) { // in case there is no command
+        console.log("data length 0")
+        return; // prevents other code from running
+    }
+
+
+    data = data.toString('hex')
+    answerRequest(connection, data)
+
+}
+
+
 
 
 let port = 4000
@@ -159,6 +165,26 @@ app.get("/rent/:boxId", async (req, res)=>{
 })
 
 app.get("/queryPowerBankInfo", async (req, res)=>{
+    let answered  = false
+    let buf = Buffer.from("000764018a11223344", 'hex');
+    let connection = clientsList[0].connection
+    if(connection.write(buf)) {
+        connection.on("data", data => {
+            let cmd = RequestOperations.CmdExtractor(data)
+            if (cmd != undefined) {
+                if(cmd == CMDs.PowerBankInfo){
+                    res.send(data.toString("hex"))
+                }else {
+                    console.log("ignoring data cause waiting for specific")
+                }
+            }
+        })
+    }else {
+        res.send("Failed to send request to station")
+    }
+    return false
+
+
     if (await sendData(clientsList[0].connection, "000764018a11223344", null)){
             res.send("request sent")
     }else {
