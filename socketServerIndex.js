@@ -37,10 +37,10 @@ let server = net.createServer(connection => {
 
 
 let port = 4000
-let host = 'localhost'
-//let host = '164.132.59.129'
+//let host = 'localhost'
+let host = '164.132.59.129'
 server.listen(port, host, () => {
-    console.log("waiting for a connection"); // prints on start
+    console.log("server listening on port: {$port}"); // prints on start
 });
 
 server.on("end", ()=>{
@@ -48,21 +48,24 @@ server.on("end", ()=>{
 } )
 
 
-function answerRequest(connection, data){
+async function answerRequest(connection, data) {
     let buf
     let cmd = RequestOperations.CmdExtractor(data)
-    if(cmd != undefined){
+    if (cmd != undefined) {
         console.log(cmd + " request entered, trying to answer")
-        if(CmdExtractor(data) == CMDs.login){
-            let loginRequest =  LoginRequest(data)
-            answerLogin(connection, buf, loginRequest)
-        }else {
-            let client =  connectionToClient(clientsList, connection)
-            if(client != false){
-                if(client.loggedIn == true ){
-                    switch (cmd){
+        if (CmdExtractor(data) == CMDs.login) {
+            let loginRequest = LoginRequest(data)
+            answerLogin(connection, loginRequest)
+        } else {
+            let client = await connectionToClient(clientsList, connection)
+            if (client != false) {
+                if (client.loggedIn == true) {
+                    switch (cmd) {
                         case CMDs.heartBit:
                             answerHeartBit(connection, buf, null)
+                            break
+                        case CMDs.PowerBankInfo:
+                            getPBQueryAnswer(data)
                             break
                         case CMDs.RentPowerBank:
                             getRentAnswer(data)
@@ -71,11 +74,12 @@ function answerRequest(connection, data){
                             answerPowerBankReturn(connection, buf, null)
                             break
                     }
-                }else {
+                } else {
                     console.log("closing connection for no loggIn")
                     connection.end
                 }
-            }else {
+            } else {
+                console.log(client)
                 console.log("Operation no permitted")
                 connection.end();
             }
@@ -83,13 +87,12 @@ function answerRequest(connection, data){
     }
 }
 
-async function answerLogin(connection, buf, loginRequest) {
+async function answerLogin(connection, loginRequest) {
     let currentConnectionBoxId = loginRequest.boxId
     console.log("adding box :::: " + currentConnectionBoxId)
     await clientsList.push({connection, loggedIn: true, boxId: currentConnectionBoxId})
     let answer = LoginAnswer("0008", "01", '01', '11223344', "01")
-    buf = Buffer.from(answer, 'hex');
-    connection.write(buf)
+    connection.write(Buffer.from(answer, 'hex'))
 }
 
 function answerHeartBit(connection, buf, request){
@@ -103,6 +106,11 @@ function answerPowerBankReturn(connection, buf, request){
 }
 
 function getRentAnswer(data){
+    console.log(data)
+}
+
+function getPBQueryAnswer(data){
+    console.log("power bank info coming")
     console.log(data)
 }
 
@@ -148,4 +156,12 @@ app.get("/rent/:boxId", async (req, res)=>{
     }else {
         res.send("wrong")
     }*/
+})
+
+app.get("/queryPowerBankInfo", async (req, res)=>{
+    if (await sendData(clientsList[0].connection, "000764018a11223344", null)){
+            res.send("request sent")
+    }else {
+        res.send("wrong")
+    }
 })

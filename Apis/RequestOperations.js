@@ -22,15 +22,24 @@ async function connectionToClient(clientsList, connection) {
     if ((clientsList == undefined) || (clientsList.length == 0)) return false
     let found = false;
     let position = undefined
-    await clientsList.map((con, index) => {
-        if ((con.boxId == connection.boxId)) {
+    await clientsList.map((client, index) => {
+        if ((client.connection == connection)) {
             found = true;
             position = index
         }
     })
-    if (!found) return false
+    if (!found) {
+        return false
+    }
     return clientsList[position]
 }
 
-module.exports = { CmdExtractor,  RequestOperations, connectionToClient}
+function sendData(connection, dataString, encoding){
+    let buf = Buffer.from(dataString, 'hex');
+    if(connection.write(buf)) return true
+    return false
+}
+
+
+module.exports = { CmdExtractor,  RequestOperations, connectionToClient, sendData}
 
