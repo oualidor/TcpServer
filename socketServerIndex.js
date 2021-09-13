@@ -12,6 +12,7 @@ let server = net.createServer(connection => {
     console.log("Station connected ");
 
     connection.on("data", data => {
+        data = data.toString("hex")
         NormalDataEvent(connection, data)
     });
     connection.on("end", ()=>{
@@ -32,9 +33,6 @@ function NormalDataEvent(connection, data){
         console.log("data length 0")
         return; // prevents other code from running
     }
-
-
-    data = data.toString('hex')
     answerRequest(connection, data)
 
 }
@@ -170,10 +168,15 @@ app.get("/queryPowerBankInfo", async (req, res)=>{
     let connection = clientsList[0].connection
     if(connection.write(buf)) {
         connection.on("data", data => {
+            data = data.toString("hex")
             let cmd = RequestOperations.CmdExtractor(data)
             if (cmd != undefined) {
                 if(cmd == CMDs.PowerBankInfo){
-                    res.send(data.toString("hex"))
+                    console.log("setting data trigger to normal")
+                    connection.on("data", data=>{
+                        NormalDataEvent(connection, data)
+                    })
+                    res.send(data)
                 }else {
                     console.log("ignoring data cause waiting for specific")
                 }
