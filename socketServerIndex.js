@@ -173,7 +173,9 @@ app.get("/queryPowerBankInfo", async (req, res)=>{
             if (cmd != undefined) {
                 if(cmd == CMDs.PowerBankInfo){
                     console.log("setting data trigger to normal")
+                    connection.removeAllListeners("data")
                     connection.on("data", data=>{
+                        data = data.toString("hex")
                         NormalDataEvent(connection, data)
                     })
                     res.send(data)
