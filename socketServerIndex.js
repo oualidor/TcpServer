@@ -149,35 +149,29 @@ app.get("/rent/:boxId", async (req, res)=>{
 })
 
 
-function queryPowerBanksInfo(connection){
+app.get("/queryPowerBankInfo", async (req, res)=>{
+    let answered  = false
     let buf = Buffer.from("000764018a11223344", 'hex');
+    let connection = clientsList[0].connection
     if(connection.write(buf)) {
-        connection.on("data", async data => {
+        connection.on("data", data => {
             data = data.toString("hex")
             let cmd = RequestOperations.CmdExtractor(data)
             if (cmd != undefined) {
-                if (cmd == CMDs.PowerBankInfo) {
+                if(cmd == CMDs.PowerBankInfo){
                     console.log("setting data trigger to normal")
                     connection.removeAllListeners("data")
-                    connection.on("data", data => {
+                    connection.on("data", data=>{
                         data = data.toString("hex")
                         NormalDataEvent(connection, data)
                     })
-                    return {finalResult: true, data: data};
-                } else {
+                    res.send(data)
+                }else {
                     console.log("ignoring data cause waiting for specific")
                 }
             }
         })
     }else {
-        return false
-    }
-}
-app.get("/queryPowerBankInfo", async (req, res)=>{
-  let request = await queryPowerBanksInfo(clientsList[0].connection)
-    if(request != false){
-        res.send(request)
-    }else {
-        res.send("wrong")
+        res.send("Failed to send request to station")
     }
 })
