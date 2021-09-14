@@ -126,6 +126,7 @@ function sendData(connection, dataString, encoding){
 
 
 let app = require("./app")
+const {PowerBankQueryResult} = require("./Structures/PowerBankQuery");
 const {connectionToClient} = require("./Apis/RequestOperations");
 const {ConnectionValidator} = require("./Apis/RequestOperations");
 const {CmdExtractor} = require("./Apis/RequestOperations");
@@ -139,12 +140,23 @@ app.get("/", (req, res)=>{
     res.send("running")
 })
 app.get("/rent/:boxId", async (req, res)=>{
-    let buf = Buffer.from("000865018a1122334400", 'hex');
-    let connection = clientsList[0].connection
-    if(connection.write(buf)) {
-        connection.on("data", data => {
+    let requestAddress = 'http://164.132.59.129:3000/queryPowerBankInfo'
+    const requestOptions = {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'},
+    };
+    const response = await fetch(requestAddress, requestOptions);
+    const data = await response.json();
+    if (data.finalResult == true) {
+        let buf = Buffer.from("000865018a1122334400", 'hex');
+        let connection = clientsList[0].connection
+        if(connection.write(buf)) {
+            connection.on("data", data => {
 
-        })
+            })
+        }
+    } else {
+        return null;
     }
 })
 
@@ -162,16 +174,16 @@ app.get("/queryPowerBankInfo", async (req, res)=>{
                     console.log("setting data trigger to normal")
                     connection.removeAllListeners("data")
                     connection.on("data", data=>{
-                        data = data.toString("hex")
+                        data = data.toString('hex')
                         NormalDataEvent(connection, data)
                     })
-                    res.send(data)
+                    res.send({finalResult: true, data: PowerBankQueryResult(data)})
                 }else {
                     console.log("ignoring data cause waiting for specific")
                 }
             }
         })
     }else {
-        res.send("Failed to send request to station")
+        res.send({finalResult: false, error: "Failed to send request to station"})
     }
 })
