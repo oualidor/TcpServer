@@ -139,59 +139,44 @@ app.get("/", (req, res)=>{
     res.send("running")
 })
 app.get("/rent/:boxId", async (req, res)=>{
-    let {boxId} = req.params;
-    let found=false;
-    await clientsList.map((conn)=>{
-        console.log(conn.boxId)
-        console.log(boxId)
-        if(conn.boxId == boxId){
-            found = true
-        }else {
-            console.log("wrong")
-        }
-    });
-    if(found){
-        res.send("box "+ boxId + "found")
-    }else {
-        res.send("box "+ boxId + "not found")
-    }
-    /*if (await sendData(clientsList[0].connection, "000865018a1122334400", null)){
-        res.send("request sent")
-    }else {
-        res.send("wrong")
-    }*/
-})
-
-app.get("/queryPowerBankInfo", async (req, res)=>{
-    let answered  = false
-    let buf = Buffer.from("000764018a11223344", 'hex');
+    let buf = Buffer.from("000865018a1122334400", 'hex');
     let connection = clientsList[0].connection
     if(connection.write(buf)) {
         connection.on("data", data => {
+
+        })
+    }
+})
+
+
+function queryPowerBanksInfo(connection){
+    let buf = Buffer.from("000764018a11223344", 'hex');
+    if(connection.write(buf)) {
+        connection.on("data", async data => {
             data = data.toString("hex")
             let cmd = RequestOperations.CmdExtractor(data)
             if (cmd != undefined) {
-                if(cmd == CMDs.PowerBankInfo){
+                if (cmd == CMDs.PowerBankInfo) {
                     console.log("setting data trigger to normal")
                     connection.removeAllListeners("data")
-                    connection.on("data", data=>{
+                    connection.on("data", data => {
                         data = data.toString("hex")
                         NormalDataEvent(connection, data)
                     })
-                    res.send(data)
-                }else {
+                    return {finalResult: true, data: data};
+                } else {
                     console.log("ignoring data cause waiting for specific")
                 }
             }
         })
     }else {
-        res.send("Failed to send request to station")
+        return false
     }
-    return false
-
-
-    if (await sendData(clientsList[0].connection, "000764018a11223344", null)){
-            res.send("request sent")
+}
+app.get("/queryPowerBankInfo", async (req, res)=>{
+  let request = await queryPowerBanksInfo(clientsList[0].connection)
+    if(request != false){
+        res.send(request)
     }else {
         res.send("wrong")
     }
