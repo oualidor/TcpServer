@@ -126,6 +126,9 @@ function sendData(connection, dataString, encoding){
 
 
 let app = require("./app")
+const {RentPowerBankResult} = require("./Structures/RentPowerBankRequest");
+const {RentPowerBankRequest} = require("./Structures/RentPowerBankRequest");
+const {PowerBankQuery} = require("./Structures/PowerBankQuery");
 const {PowerBankQueryResult} = require("./Structures/PowerBankQuery");
 const {connectionToClient} = require("./Apis/RequestOperations");
 const {ConnectionValidator} = require("./Apis/RequestOperations");
@@ -146,26 +149,43 @@ app.get("/rent/:boxId", async (req, res)=>{
         headers: {'Content-Type': 'application/json'},
     };
     const response = await fetch(requestAddress, requestOptions);
-    const data = await response.json();
-    if (data.finalResult == true) {
-        let buf = Buffer.from("000865018a1122334400", 'hex');
-        let connection = clientsList[0].connection
-        if(connection.write(buf)) {
-            connection.on("data", data => {
-
-            })
+    const rs = await response.json();
+    if (rs.finalResult == true) {
+        if(rs.data.powerBanksList.length >0){
+            let connection = clientsList[0].connection
+            if(connection.write(RentPowerBankRequest("0008", "01", "8a", "11223344", rs.data.powerBanksList[0].slot))) {
+                connection.on("data", data => {
+                    data = data.toString('hex');
+                    let cmd = RequestOperations.CmdExtractor(data)
+                    if (cmd != undefined) {
+                        if(cmd == CMDs.RentPowerBank){
+                            console.log("setting data trigger to normal")
+                            connection.removeAllListeners("data")
+                            connection.on("data", data=>{
+                                data = data.toString('hex')
+                                NormalDataEvent(connection, data)
+                            })
+                            res.send({finalResult: true, data: RentPowerBankResult(data)})
+                        }else {
+                            console.log("Ignoring data cause waiting for rent results only")
+                        }
+                    }
+                })
+            }else {
+                res.send({finaResult: false, error: "could not send rent request"})
+            }
+        }else {
+            res.send({finaResult: false, error: "no available power banks on station"})
         }
     } else {
-        return null;
+        res.send({finaResult: false, error: rs.error})
     }
 })
 
 
 app.get("/queryPowerBankInfo", async (req, res)=>{
-    let answered  = false
-    let buf = Buffer.from("000764018a11223344", 'hex');
     let connection = clientsList[0].connection
-    if(connection.write(buf)) {
+    if(connection.write(PowerBankQuery("0007", "01", "8a", "11223344"))) {
         connection.on("data", data => {
             data = data.toString("hex")
             let cmd = RequestOperations.CmdExtractor(data)

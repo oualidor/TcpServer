@@ -4,7 +4,7 @@ const CMDs = require( "../Apis/CMDs");
 
 const PowerBankQuery = (PackLen, Version, CheckSum, Token) => {
 
-    return (PackLen+CMDs.PowerBankInfo+Version+CheckSum+Token);
+    return Buffer.from(PackLen+CMDs.PowerBankInfo+Version+CheckSum+Token, "hex");
 
 };
 
