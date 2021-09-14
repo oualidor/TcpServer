@@ -15,4 +15,24 @@ const RentPowerBankResult = (data) => {
     })
 };
 
-module.exports = {RentPowerBankRequest, RentPowerBankResult}
+//module.exports = {RentPowerBankRequest, RentPowerBankResult}
+const axios = require('axios').default;
+async function test() {
+
+    try {
+        let rs = await axios({
+            url: 'http://localhost:8080/Admin/Station/getAll/0/9999',
+            method: "get",
+            responseType: 'json'
+        })
+        console.log(rs.data)
+
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+test()
+
+
+

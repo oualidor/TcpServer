@@ -1,3 +1,4 @@
+const axios = require('axios').default;
 const  {LoginRequest}  =  require("./Structures/LoginRequest")
 const  {LoginAnswer}  =  require("./Structures/LoginAnswer")
 const RequestOperations = require("./Apis/RequestOperations");
@@ -144,42 +145,43 @@ app.get("/", (req, res)=>{
 })
 app.get("/rent/:boxId", async (req, res)=>{
     let requestAddress = 'http://164.132.59.129:3000/queryPowerBankInfo'
-    const requestOptions = {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json'},
-    };
-    const response = await fetch(requestAddress, requestOptions);
-    const rs = await response.json();
-    if (rs.finalResult == true) {
-        if(rs.data.powerBanksList.length >0){
-            let connection = clientsList[0].connection
-            if(connection.write(RentPowerBankRequest("0008", "01", "8a", "11223344", rs.data.powerBanksList[0].slot))) {
-                connection.on("data", data => {
-                    data = data.toString('hex');
-                    let cmd = RequestOperations.CmdExtractor(data)
-                    if (cmd != undefined) {
-                        if(cmd == CMDs.RentPowerBank){
-                            console.log("setting data trigger to normal")
-                            connection.removeAllListeners("data")
-                            connection.on("data", data=>{
-                                data = data.toString('hex')
-                                NormalDataEvent(connection, data)
-                            })
-                            res.send({finalResult: true, data: RentPowerBankResult(data)})
-                        }else {
-                            console.log("Ignoring data cause waiting for rent results only")
+    try {
+        const request = await axios({url: requestAddress, method: "get", responseType: 'json'})
+        let rs  =request.data
+        if (rs.finalResult == true) {
+            if(rs.data.powerBanksList.length >0){
+                let connection = clientsList[0].connection
+                if(connection.write(RentPowerBankRequest("0008", "01", "8a", "11223344", rs.data.powerBanksList[0].slot))) {
+                    connection.on("data", data => {
+                        data = data.toString('hex');
+                        let cmd = RequestOperations.CmdExtractor(data)
+                        if (cmd != undefined) {
+                            if(cmd == CMDs.RentPowerBank){
+                                console.log("setting data trigger to normal")
+                                connection.removeAllListeners("data")
+                                connection.on("data", data=>{
+                                    data = data.toString('hex')
+                                    NormalDataEvent(connection, data)
+                                })
+                                res.send({finalResult: true, data: RentPowerBankResult(data)})
+                            }else {
+                                console.log("Ignoring data cause waiting for rent results only")
+                            }
                         }
-                    }
-                })
+                    })
+                }else {
+                    res.send({finaResult: false, error: "could not send rent request"})
+                }
             }else {
-                res.send({finaResult: false, error: "could not send rent request"})
+                res.send({finaResult: false, error: "no available power banks on station"})
             }
-        }else {
-            res.send({finaResult: false, error: "no available power banks on station"})
+        } else {
+            res.send({finaResult: false, error: rs.error})
         }
-    } else {
-        res.send({finaResult: false, error: rs.error})
+    } catch (error) {
+        res.send({finaResult: false, error: "could not query station for info"})
     }
+
 })
 
 
