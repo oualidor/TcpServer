@@ -4,7 +4,10 @@ const  {LoginRequest}  =  require("./Structures/LoginRequest")
 const  {LoginAnswer}  =  require("./Structures/LoginAnswer")
 const RequestOperations = require("./Apis/RequestOperations");
 const CMDs =  require("./Apis/CMDs");
-
+let TCP_PORT = 4000
+//let host = 'localhost'
+let TCP_HOST = '164.132.59.129'
+let EXPRESS_PORT = 3000
 const net = require("net"); // import net
 let clientsList = []
 let server = net.createServer(connection => {
@@ -37,17 +40,14 @@ function NormalDataEvent(connection, data){
 
 }
 
-let port = 4008
-let host = 'localhost'
-//let host = '164.132.59.129'
-server.listen(port, host, () => {
-    console.log("server listening on port: {$port}"); // prints on start
+
+server.listen(TCP_PORT, TCP_HOST, () => {
+    console.log("server listening on port: {$TCP_PORT}"); // prints on start
 });
 
 server.on("end", ()=>{
     console.log("closed")
 } )
-
 
 async function answerRequest(connection, data) {
     let buf
@@ -141,8 +141,8 @@ const {connectionToClient} = require("./Apis/RequestOperations");
 const {CmdExtractor} = require("./Apis/RequestOperations");
 
 
-app.listen(3500, () => {
-    console.log(`Sez back end runing on  3000.`)
+app.listen(EXPRESS_PORT, () => {
+    console.log(`Sez back end running on ${EXPRESS_PORT}.`)
 });
 app.get("/", (req, res)=>{
     res.send("running")
