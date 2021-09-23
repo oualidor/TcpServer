@@ -101,6 +101,7 @@ async function answerLogin(connection, loginRequest) {
             connection.write(Buffer.from(answer, 'hex'))
         }
     }catch (error){
+        console.log("Refusing station login due an error")
         let answer = LoginAnswer("0008", "01", '01', '11223344', "00")
         connection.write(Buffer.from(answer, 'hex'))
     }
