@@ -2,10 +2,12 @@ const axios = require("axios")
 const HttpRequestHandler = {
     async GET(URL) {
         try{
-            const response  = await axios({url: URL, method: "get", responseType: 'json'})
-            const data = await response.data;
+            URL.replace(/[^a-zA-Z0-9]/g, "")
+            const request  = await axios({url: URL, method: "get", responseType: 'json'})
+            const data = await request.data;
             return data
         }catch (error){
+            console.log(error)
             return {finalResult: false, error: error}
         }
     },

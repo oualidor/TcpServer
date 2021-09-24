@@ -18,21 +18,7 @@ function RequestOperations(data){
         }
     }
 }
-async function connectionToClient(clientsList, connection) {
-    if ((clientsList == undefined) || (clientsList.length == 0)) return false
-    let found = false;
-    let position = undefined
-    await clientsList.map((client, index) => {
-        if ((client.connection == connection)) {
-            found = true;
-            position = index
-        }
-    })
-    if (!found) {
-        return false
-    }
-    return clientsList[position]
-}
+
 
 function sendData(connection, dataString, encoding){
     let buf = Buffer.from(dataString, 'hex');
@@ -41,5 +27,5 @@ function sendData(connection, dataString, encoding){
 }
 
 
-module.exports = { CmdExtractor,  RequestOperations, connectionToClient, sendData}
+module.exports = { CmdExtractor,  RequestOperations, sendData}
 
