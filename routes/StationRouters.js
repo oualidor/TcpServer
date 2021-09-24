@@ -17,7 +17,6 @@ const StationRouters  = {
             res.send({finalResult: false, error: "Station not logged in"})
         }else {
             let connection  = client.connection
-
             try{
                 if (connection.write(PowerBankQuery("0007", "01", "8a", "11223344"))) {
                     connection.on("data", data => {
@@ -29,7 +28,7 @@ const StationRouters  = {
                                 connection.removeAllListeners("data")
                                 connection.on("data", data => {
                                     data = data.toString('hex')
-                                    NormalDataEvent(this.connection, data)
+                                    NormalDataEvent(connection, data)
                                 })
                                 res.send({finalResult: true, data: PowerBankQueryResult(data)})
                             } else {

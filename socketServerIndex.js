@@ -72,7 +72,6 @@ async function answerRequest(connection, data) {
                         break
                 }
             } else {
-                console.log(client)
                 console.log("Operation no permitted")
                 connection.end();
             }
