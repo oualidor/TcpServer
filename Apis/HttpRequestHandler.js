@@ -1,12 +1,9 @@
+const axios = require("axios")
 const HttpRequestHandler = {
     async GET(URL) {
-        const requestOptions = {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json'},
-        };
         try{
-            const response = await fetch(URL, requestOptions);
-            const data = await response.json();
+            const response  = await axios({url: URL, method: "get", responseType: 'json'})
+            const data = await response.data;
             return data
         }catch (error){
             return {finalResult: false, error: error}
@@ -15,14 +12,9 @@ const HttpRequestHandler = {
 
 
     async  POST(URL, DATA) {
-        const requestOptions = {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(DATA)
-        };
         try{
-            const response = await fetch(URL, requestOptions);
-            const data = await response.json();
+            const response  = await axios.post( URL,  "POST",DATA)
+            const data = await response.data;
             return data
         }catch (error){
             return {finalResult: false, error: error}
