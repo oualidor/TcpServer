@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+var app = require('../ExpressServer');
 var debug = require('debug')('cbc-altec-tcp-server:server');
 var http = require('http');
 

@@ -15,7 +15,7 @@ async function answerLogin(clientsList, connection, loginRequest) {
         let rs = await HttpRequestHandler.GET(url)
         if (rs.finalResult) {
             console.log("Client logged in successfully")
-            await clientsList.push(TcpClient(currentConnectionBoxId, connection))
+            expressServer.addClient({boxId: currentConnectionBoxId, connection: connection})
             let answer = LoginAnswer("0008", "01", '01', '11223344', "01")
             connection.write(Buffer.from(answer, 'hex'))
         } else {

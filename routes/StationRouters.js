@@ -73,8 +73,9 @@ const StationRouters  = {
         }
     }
     ,
-        test : (req, res) => {
-            res.send({finalResult: true, error: "Test work"})
+        test : (req, res, clientsList) => {
+            res.send({finalResult: true, data: clientsList})
+            //res.send({finalResult: true, error: "Test work"})
         }
     }
 
