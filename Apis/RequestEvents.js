@@ -21,7 +21,7 @@ function answerHeartBit (connection, buf, request){
 
 }
 
-async function answerPowerBankReturn(connection, buf, stationRequest){
+async function answerPowerBankReturn(connection,  stationRequest){
     let serverAnswer = ReturnPowerBank.serverAnswer("0009", "01", stationRequest.checkSum , "11223344", stationRequest.slot, "03")
     connection.write(serverAnswer)
 }
@@ -57,7 +57,7 @@ const RequestEvents = {
                         case CMDs.ReturnPowerBank:
                             console.log(data)
                             let stationRequest = ReturnPowerBank.stationRequest(data)
-                            answerPowerBankReturn(connection, buf, stationRequest)
+                            answerPowerBankReturn(connection, stationRequest)
                             break
                     }
                 } else {
