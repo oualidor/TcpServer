@@ -32,6 +32,7 @@ async function answerLogin(clientsList, connection, loginRequest) {
             connection.write(Buffer.from(answer, 'hex'))
         }
     } catch (error) {
+        ConsoleMsgs.error(error)
         ConsoleMsgs.error("Refusing station login due an error")
         let answer = LoginAnswer("0008", "01", '01', '11223344', "00")
         connection.write(Buffer.from(answer, 'hex'))
