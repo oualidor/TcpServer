@@ -24,10 +24,8 @@ const HttpRequestHandler = {
             URL.replace(/[^a-zA-Z0-9]/g, "")
             const request  = await axios({url: URL, method: "get",  headers: {'Content-Type': 'application/json', authorization: 'Bearer ' + adminToken}})
             const data = await request.data;
-            console.log(data)
             return data
         }catch (error){
-            console.log(error)
             return {finalResult: false, error: error}
         }
     },

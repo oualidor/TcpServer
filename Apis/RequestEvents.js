@@ -12,10 +12,10 @@ const {ConnectionOperations} = require("./ConnectionOperations");
 async function answerLogin(clientsList, connection, loginRequest) {
     let currentConnectionBoxId = loginRequest.boxId
     try {
-        let url = BACKEND_SERVER + 'Admin/Station/getOne/' + currentConnectionBoxId
+        let url = BACKEND_SERVER + 'Admin/Station/getOneByPublicId/' + currentConnectionBoxId
         let rs = await HttpRequestHandler.GET(url)
         if (rs.finalResult == true) {
-            console.log("Client logged in successfully")
+            ConsoleMsgs.success("Client logged in successfully")
             expressServer.addClient({boxId: currentConnectionBoxId, connection: connection})
             let answer = LoginAnswer("0008", "01", '01', '11223344', "01")
             connection.write(Buffer.from(answer, 'hex'))
