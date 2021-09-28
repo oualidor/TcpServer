@@ -22,11 +22,10 @@ const StationRouters  = {
                 } else {
                     res.send({finalResult: false, error: "Failed to send request to station"})
                 }
-            }catch {
-                res.send({finalResult: false, error: "Failed to send request to station"})
+            }catch (e){
+                res.send({finalResult: false, error: "Error while sending request to the station"})
             }
         }
-
     },
     rentPowerBank : async (req, res, clientsList) => {
         try {
