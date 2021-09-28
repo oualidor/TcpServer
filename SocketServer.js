@@ -14,48 +14,41 @@ class SocketServer extends EventEmitter{
         super();
 
         this.clientsList = []
-        let server = net.createServer(connection => {
-            console.log("Client handshake detected ");
-            connection.once("data", (data)=>{
+        let server = net.createServer([{allowHalfOpen: false, pauseOnConnect: false}]);
+        server.on("connection", socket => {
+            ConsoleMsgs.debug("Client handshake")
+            socket.once("data", (data)=>{
                 data = data.toString("hex")
                 let loginRequest = LoginRequest(data)
-                this.answerLogin(this.clientsList, connection, loginRequest)
-                connection.on("data", data => {
+                this.answerLogin(this.clientsList, socket, loginRequest)
+                socket.on("data", data => {
                     data = data.toString("hex")
-                    ConnectionEvents.General(this.clientsList , connection, data)
+                    ConnectionEvents.General(this.clientsList , socket, data)
                 });
             })
-
-
-            connection.on("error", (error)=>{
+            socket.on("error", (error)=>{
                 ConsoleMsgs.debug(error)
             })
-            connection.on("connect", ()=>{
+            socket.on("connect", ()=>{
                 ConsoleMsgs.debug("connect triggered")
             })
-            connection.on("end", ()=>{
+            socket.on("end", ()=>{
                 console.log("Connection ended, client disconnected")
                 //remove client
-                this.removeClientByConnection(connection)
+                this.removeClientByConnection(socket)
             })
-
-            connection.on("timeout", ()=>{
+            socket.on("timeout", ()=>{
                 ConsoleMsgs.debug("connect timout")
             })
-
-            connection.on("lookup", (error, address, family, host)=>{
+            socket.on("lookup", (error, address, family, host)=>{
                 ConsoleMsgs.debug("connect lookup")
             })
-            connection.on("drain",  ()=>{
+            socket.on("drain",  ()=>{
                 ConsoleMsgs.debug("connect drain")
             })
-            connection.on("close", (hadError)=>{
+            socket.on("close", (hadError)=>{
                 ConsoleMsgs.debug("connect close")
             })
-
-        });
-        server.on("connection", socket => {
-            ConsoleMsgs.debug("Server connection")
         })
 
         server.once('error', function(err) {
@@ -76,6 +69,7 @@ class SocketServer extends EventEmitter{
         server.listen(TCP_PORT, HOST, () => {
             console.log(`TCP RUNNING on PORT: `+ TCP_PORT); // prints on start
         });
+
         server.on("close", ()=>{
             console.log("closed")
         } )
@@ -122,7 +116,6 @@ class SocketServer extends EventEmitter{
             if(client.connection == connection) return false
             return true
         })
-        console.log(this.clientsList)
         this.emit("listUpdate")
     }
 }
