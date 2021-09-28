@@ -22,7 +22,7 @@ function answerHeartBit (connection, buf, request){
 }
 
 async function answerPowerBankReturn(connection, buf, stationRequest){
-    let serverAnswer = ReturnPowerBank.serverAnswer("0009", "01", "fa", "11223344", stationRequest.slot, "03")
+    let serverAnswer = ReturnPowerBank.serverAnswer("0009", "01", stationRequest.checkSum , "11223344", stationRequest.slot, "03")
     connection.write(serverAnswer)
 }
 
