@@ -54,6 +54,10 @@ class SocketServer extends EventEmitter{
             })
 
         });
+        server.on("connection", socket => {
+            ConsoleMsgs.debug("Server connection")
+        })
+
         server.once('error', function(err) {
             console.log(err)
             if (err.code === 'EADDRINUSE') {
@@ -68,6 +72,7 @@ class SocketServer extends EventEmitter{
             }
 
         });
+        server.re
 
         server.listen(TCP_PORT, HOST, () => {
             console.log(`TCP RUNNING on PORT: `+ TCP_PORT); // prints on start
