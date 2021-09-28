@@ -112,7 +112,6 @@ class SocketServer extends EventEmitter{
 
     removeClientByConnection(connection){
         this.clientsList = this.clientsList.filter(client => {
-            console.log(connection)
             if(client.connection == connection) return false
             return true
         })
