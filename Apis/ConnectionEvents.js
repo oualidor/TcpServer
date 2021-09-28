@@ -24,8 +24,7 @@ const ConnectionEvents = {
                     connection.removeAllListeners("data")
                     connection.on("data", data => {
                         data = data.toString('hex')
-                        console.log(this)
-                        this.General(clientsList, connection, data)
+                        ConnectionEvents.General(clientsList, connection, data)
                     })
                     res.send({finalResult: true, data: PowerBankQueries.PowerBankQueryResult(data)})
                 } else {
