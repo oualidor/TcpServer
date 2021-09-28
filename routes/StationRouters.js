@@ -51,7 +51,7 @@ const StationRouters  = {
                                         connection.removeAllListeners("data")
                                         connection.on("data", data => {
                                             data = data.toString('hex')
-                                            ConnectionEvents.General(connection, data)
+                                            ConnectionEvents.General(clientsList, connection, data)
                                         })
                                         res.send({finalResult: true, data: RentPowerBankResult(data)})
                                     } else {
