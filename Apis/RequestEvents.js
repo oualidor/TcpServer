@@ -1,4 +1,4 @@
-import {HeartBitAnswer} from "../Structures/HeartBitAnswer";
+const {HeartBitAnswer} = require("../Structures/HeartBitAnswer");
 
 const RequestOperations = require("./RequestOperations");
 const CMDs = require("./CMDs");
