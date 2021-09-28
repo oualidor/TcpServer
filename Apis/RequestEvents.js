@@ -18,7 +18,7 @@ function answerHeartBit (connection){
 
 function answerPowerBankReturn(connection,  stationRequest){
     try {
-        let serverAnswer = ReturnPowerBank.serverAnswer("0009", "01","fa" , "11223344", "02", "01")
+        let serverAnswer = ReturnPowerBank.serverAnswer( "01","fa" , "11223344", stationRequest.slot, "01")
         if(connection.write(serverAnswer)){
             ConsoleMsgs.success("answer sent to station")
         }else {
