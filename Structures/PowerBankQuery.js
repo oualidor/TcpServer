@@ -27,6 +27,4 @@ const PowerBankQueries = {
 
 };
 
-
-
 module.exports = { PowerBankQueries}

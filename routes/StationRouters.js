@@ -7,7 +7,8 @@ const {HttpRequestHandler} = require("../Apis/HttpRequestHandler");
 const {ConnectionOperations} = require("../Apis/ConnectionOperations");
 const {RentPowerBankResult} = require("../Structures/RentPowerBankRequest");
 const {RentPowerBankRequest} = require("../Structures/RentPowerBankRequest");
-const {PowerBankQuery} = require("../Structures/PowerBankQuery");
+const {PowerBankQueries} = require("../Structures/PowerBankQueries");
+
 const StationRouters  = {
     QueryInfo : async (req, res, clientsList) => {
         let {boxId} = req.params
@@ -17,7 +18,7 @@ const StationRouters  = {
         }else {
             let connection  = client.connection
             try{
-                if (connection.write(PowerBankQuery.serverQuery("0007", "01", "8a", "11223344"))) {
+                if (connection.write(PowerBankQueries.serverQuery("0007", "01", "8a", "11223344"))) {
                     ConnectionEvents.PowerBankQuery(clientsList, connection, res)
                 } else {
 
