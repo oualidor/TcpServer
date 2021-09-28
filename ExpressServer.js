@@ -8,8 +8,9 @@ const {ConnectionEvents} = require("./Apis/ConnectionEvents");
 const {StationRouters} = require("./routes/StationRouters");
 
 class ExpressServer extends EventEmitter {
-  constructor() {
+  constructor(adminToken) {
     super()
+    this.adminToken = adminToken
     this.clientsList = []
     this.app = express();
     this.app.set('views', path.join(__dirname, 'views'));
@@ -26,8 +27,10 @@ class ExpressServer extends EventEmitter {
 
 
   setRouters(){
+    this.app.get("/HeartBitExpress", (req, res)=>{
+      res.send({finalResult: true, result: "Test work"})
+    })
     this.app.get("/Station/QueryInfo/:boxId", (req, res)=>{ StationRouters.getInfo(req, res, this.clientsList)})
-    this.app.get("/Station/test", (req, res)=>{StationRouters.test(req, res, this.clientsList)})
     this.app.get("/Station/rent/:boxId", (req, res)=>{StationRouters.rentPowerBank(req, res, this.clientsList, ConnectionEvents.General)})
   }
 
@@ -44,35 +47,5 @@ class ExpressServer extends EventEmitter {
     this.emit("listUpdate")
   }
 }
-/*
-const {isMainThread,  parentPort } = require('worker_threads')
-if(isMainThread){
-  console.error("app designed to run in worker related to parent application, quiting")
-}else {
-
-
-  parentPort.on("message", (msg) =>{
-    switch (msg.operation){
-      case "add":
-        //adding client to local list
-        clientsList.push(msg.entry)
-        parentPort.postMessage(clientsList)
-      case "get":
-        parentPort.postMessage(clientsList)
-    }
-  })
-
-
-
-
-// view engine setup
-
-
-
-
-
-
-}
-*/
 
 module.exports = {ExpressServer}

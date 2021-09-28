@@ -1,6 +1,6 @@
 const axios = require("axios")
 const HttpRequestHandler = {
-    async GET(URL) {
+    async GET(URL, adminToken) {
         try{
             URL.replace(/[^a-zA-Z0-9]/g, "")
             const request  = await axios({url: URL, method: "get", responseType: 'json'})
@@ -13,9 +13,10 @@ const HttpRequestHandler = {
     },
 
 
-    async  POST(URL, DATA) {
+    async  POST(URL, DATA, token) {
+
         try{
-            const response  = await axios.post( URL,  "POST",DATA)
+            const response  = await axios.post( URL ,DATA)
             const data = await response.data;
             return data
         }catch (error){
