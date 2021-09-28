@@ -2,7 +2,7 @@ const Converter = require("../Apis/Coverter")
 const CMDs = require( "../Apis/CMDs");
 
 const PowerBankQueries = {
-    Server : (PackLen, Version, CheckSum, Token) => {
+    serverQuery : (PackLen, Version, CheckSum, Token) => {
         return Buffer.from(PackLen+CMDs.PowerBankInfo+Version+CheckSum+Token, "hex");
     },
 

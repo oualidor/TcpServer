@@ -1,7 +1,7 @@
 const RequestOperations = require("./RequestOperations");
 const CMDs = require("./CMDs");
 const {RequestEvents} = require("./RequestEvents");
-const {PowerBankQueryResult} = require("../Structures/PowerBankQuery");
+const {PowerBankQueries} = require("../Structures/PowerBankQuery");
 const ConnectionEvents = {
     General : (clientsList, connection, data) =>{
         // run this when data is received
@@ -30,7 +30,7 @@ const ConnectionEvents = {
                         data = data.toString('hex')
                         this.General(clientsList, connection, data)
                     })
-                    res.send({finalResult: true, data: PowerBankQueryResult(data)})
+                    res.send({finalResult: true, data: PowerBankQueries.PowerBankQueryResult(data)})
                 } else {
                     console.log("ignoring data cause waiting for specific")
                 }

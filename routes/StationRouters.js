@@ -17,7 +17,7 @@ const StationRouters  = {
         }else {
             let connection  = client.connection
             try{
-                if (connection.write(PowerBankQuery("0007", "01", "8a", "11223344"))) {
+                if (connection.write(PowerBankQuery.serverQuery("0007", "01", "8a", "11223344"))) {
                     ConnectionEvents.PowerBankQuery(clientsList, connection, res)
                 } else {
                     res.send({finalResult: false, error: "Failed to send request to station"})
