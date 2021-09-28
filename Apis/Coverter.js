@@ -7,7 +7,6 @@ function hexToString(str1) {
     return str;
 }
 
-
 function stringToHex(str){
     const bufferText = Buffer.from(str, 'utf8');
 
@@ -15,6 +14,21 @@ function stringToHex(str){
     return text
 }
 
-module.exports = {hexToString, stringToHex}
+function dexToPackLen(number){
+    if(number % 2 >0) number = number + 1
+    let t = number/2
+    t = t.toString(16)
+    switch (t.length){
+        case 1:
+            return "000"+t
+        case 2:
+            return "00"+t
+        case 3:
+            return  "0"+t
+    }
+    return "FFFF"
+}
+
+module.exports = {hexToString, stringToHex, dexToPackLen}
 
 

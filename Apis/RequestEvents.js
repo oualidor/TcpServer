@@ -4,15 +4,10 @@ const RequestOperations = require("./RequestOperations");
 const CMDs = require("./CMDs");
 const {ReturnPowerBank} = require("../Structures/ReturnPowerBank");
 const {ConsoleMsgs} = require("./ConsoleMsgs");
-const {LoginRequest} = require("../Structures/LoginRequest");
 const {CmdExtractor} = require("./RequestOperations");
-const {LoginAnswer} = require("../Structures/LoginAnswer");
-const {TcpClient} = require("../Structures/TcpClient");
-const {HttpRequestHandler} = require("./HttpRequestHandler");
-const {BACKEND_SERVER} = require("./Config");
 const {ConnectionOperations} = require("./ConnectionOperations");
 
-function answerHeartBit (connection, buf, request){
+function answerHeartBit (connection){
     try {
         connection.write(HeartBitAnswer("0007", "01", '00', '11223344'))
     }catch (err){
@@ -24,7 +19,6 @@ function answerHeartBit (connection, buf, request){
 function answerPowerBankReturn(connection,  stationRequest){
     try {
         let serverAnswer = ReturnPowerBank.serverAnswer("0009", "01","fa" , "11223344", "02", "01")
-        console.log(serverAnswer)
         if(connection.write(serverAnswer)){
             ConsoleMsgs.success("answer sent to station")
         }else {
@@ -56,7 +50,7 @@ const RequestEvents = {
                 if (await ConnectionOperations.isValid(clientsList, connection)) {
                     switch (cmd) {
                         case CMDs.heartBit:
-                            answerHeartBit(connection,  null)
+                            answerHeartBit(connection)
                             break
                         case CMDs.PowerBankInfo:
                             getPBQueryAnswer(data)

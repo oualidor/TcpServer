@@ -1,7 +1,11 @@
 const Converter = require("../Apis/Coverter");
 const CMDs = require("../Apis/CMDs");
+const {dexToPackLen} = require("../Apis/Coverter");
+const {decToHex} = require("../Apis/Coverter");
 const ReturnPowerBank = {
-    serverAnswer : (PackLen, Version, CheckSum, Token, Slot, Result)=>{
+    serverAnswer : (Version, CheckSum, Token, Slot, Result)=>{
+        let PackLen = CMDs.ReturnPowerBank+Version+CheckSum+Token+Slot+Result
+        PackLen = dexToPackLen(PackLen.length)
         console.log(PackLen+CMDs.ReturnPowerBank+Version+CheckSum+Token+Slot+Result)
         return Buffer.from(PackLen+CMDs.ReturnPowerBank+Version+CheckSum+Token+Slot+Result);
     },
@@ -14,5 +18,6 @@ const ReturnPowerBank = {
         })
     }
 }
+
 
 module.exports = {ReturnPowerBank}
