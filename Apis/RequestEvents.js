@@ -21,7 +21,9 @@ function answerHeartBit (connection, buf, request){
 
 }
 
-async function answerPowerBankReturn(connection,  stationRequest){
+function answerPowerBankReturn(connection,  stationRequest){
+    ConsoleMsgs.success("Answering PB return")
+    console.log(stationRequest.checkSum)
     let serverAnswer = ReturnPowerBank.serverAnswer("0009", "01", stationRequest.checkSum , "11223344", stationRequest.slot, "03")
     connection.write(serverAnswer)
 }
