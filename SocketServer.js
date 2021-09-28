@@ -76,9 +76,13 @@ class SocketServer extends EventEmitter{
         server.listen(TCP_PORT, HOST, () => {
             console.log(`TCP RUNNING on PORT: `+ TCP_PORT); // prints on start
         });
-        server.on("end", ()=>{
+        server.on("close", ()=>{
             console.log("closed")
         } )
+
+        server.on("listening", ()=>{
+            ConsoleMsgs.debug("Server listening")
+        })
     }
 
     async  answerLogin(clientsList, connection, loginRequest) {
