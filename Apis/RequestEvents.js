@@ -22,11 +22,16 @@ function answerHeartBit (connection, buf, request){
 }
 
 function answerPowerBankReturn(connection,  stationRequest){
-
-    ConsoleMsgs.success("Answering PB return")
-    let serverAnswer = ReturnPowerBank.serverAnswer("0009", "01","fa" , "11223344", "02", "01")
-    connection.write(serverAnswer)
+    try {
+        ConsoleMsgs.success("Answering PB return")
+        let serverAnswer = ReturnPowerBank.serverAnswer("0009", "01","fa" , "11223344", "02", "01")
+        console.log(serverAnswer)
+        connection.write(serverAnswer)
+    }catch (e){
+        ConsoleMsgs.error(e)
+    }
 }
+
 
 async function getRentAnswer(data) {
     console.log(data)
