@@ -18,7 +18,13 @@ async function answerLogin(clientsList, connection, loginRequest) {
             ConsoleMsgs.success("Client logged in successfully")
             expressServer.addClient({boxId: currentConnectionBoxId, connection: connection})
             let answer = LoginAnswer("0008", "01", '01', '11223344', "01")
-            connection.write(Buffer.from(answer, 'hex'))
+            try{
+                connection.write(Buffer.from(answer, 'hex'))
+            }catch (e){
+                ConsoleMsgs.error("could not write data to station")
+            }
+
+
         } else {
             console.log(rs)
             ConsoleMsgs.error("Refusing station login due an error while communication with back end")
