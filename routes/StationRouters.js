@@ -21,7 +21,6 @@ const StationRouters  = {
                 if (connection.write(PowerBankQueries.serverQuery("0007", "01", "8a", "11223344"))) {
                     ConnectionEvents.PowerBankQuery(clientsList, connection, res)
                 } else {
-
                     res.send({finalResult: false, error: "Failed to send request to station"})
                 }
             }catch (e){
@@ -76,11 +75,6 @@ const StationRouters  = {
             res.send({finaResult: false, error: "could not query station for info"})
         }
     }
-    ,
-        test : (req, res, clientsList) => {
-            res.send({finalResult: true, data: clientsList})
-            //res.send({finalResult: true, error: "Test work"})
-        }
     }
 
 

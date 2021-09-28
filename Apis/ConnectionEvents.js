@@ -5,12 +5,8 @@ const {PowerBankQueries} = require("../Structures/PowerBankQueries");
 const ConnectionEvents = {
     General : (clientsList, connection, data) =>{
         // run this when data is received
-        if (data == undefined || data == null) {
-            console.log("no data found")
-        }
-
+        if (data == undefined || data == null) {console.log("no data found")}
         const dataArgs = data.toString().split(" "); // splits the data into spaces
-
         if (dataArgs.length === 0) { // in case there is no command
             console.log("data length 0")
             return; // prevents other code from running
@@ -28,6 +24,7 @@ const ConnectionEvents = {
                     connection.removeAllListeners("data")
                     connection.on("data", data => {
                         data = data.toString('hex')
+                        console.log(this)
                         this.General(clientsList, connection, data)
                     })
                     res.send({finalResult: true, data: PowerBankQueries.PowerBankQueryResult(data)})
