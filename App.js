@@ -28,7 +28,6 @@ async function main(){
         socketServer.on("listUpdate", ()=>{
             clientsList = socketServer.clientsList
             expressServer.clientsList = clientsList
-            console.log(clientsList)
         })
     }else {
         ConsoleMsgs.heavyError("Login Fails, closing the system")

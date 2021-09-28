@@ -4,7 +4,6 @@ const {RequestEvents} = require("./RequestEvents");
 const {PowerBankQueryResult} = require("../Structures/PowerBankQuery");
 const ConnectionEvents = {
     General : (clientsList, connection, data) =>{
-        console.log("General data event triggered")
         // run this when data is received
         if (data == undefined || data == null) {
             console.log("no data found")
@@ -16,8 +15,7 @@ const ConnectionEvents = {
             console.log("data length 0")
             return; // prevents other code from running
         }
-            RequestEvents.answerRequest(clientsList, connection, data).then(r=>{})
-
+        RequestEvents.answerRequest(clientsList, connection, data).then(r=>{})
     },
 
     PowerBankQuery : (clientsList, connection, res) =>{

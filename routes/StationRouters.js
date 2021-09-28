@@ -28,11 +28,11 @@ const StationRouters  = {
         }
 
     },
-    rentPowerBank : async (req, res, clientsList,  NormalDataEvent) => {
+    rentPowerBank : async (req, res, clientsList) => {
         try {
             let { boxId } = req.params
             let client = await ConnectionOperations.getClientByBoxId(clientsList, boxId)
-            if (client == true) {
+            if (client == false) {
                 res.send({finalResult: false, error: "Station not logged in"})
             } else {
                 let requestAddress = BACKEND_SERVER+'Admin/Station/getRealTimeInfo/'+boxId
@@ -50,7 +50,7 @@ const StationRouters  = {
                                         connection.removeAllListeners("data")
                                         connection.on("data", data => {
                                             data = data.toString('hex')
-                                            NormalDataEvent(connection, data)
+                                            ConnectionEvents.General(connection, data)
                                         })
                                         res.send({finalResult: true, data: RentPowerBankResult(data)})
                                     } else {
@@ -64,7 +64,9 @@ const StationRouters  = {
                     } else {
                         res.send({finaResult: false, error: "no available power banks on station"})
                     }
-                } else {
+                }
+                else {
+                    console.log(rs)
                     res.send({finaResult: false, error: "error while communicating with back end"})
                 }
             }

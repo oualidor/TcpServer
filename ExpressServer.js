@@ -39,7 +39,7 @@ class ExpressServer extends EventEmitter {
       res.send({finalResult: true, result: "Test work"})
     })
     this.app.get("/Station/QueryInfo/:boxId", (req, res)=>{ StationRouters.QueryInfo(req, res, this.clientsList)})
-    this.app.get("/Station/rent/:boxId", (req, res)=>{StationRouters.rentPowerBank(req, res, this.clientsList, ConnectionEvents.General)})
+    this.app.get("/Station/rent/:boxId", (req, res)=>{StationRouters.rentPowerBank(req, res, this.clientsList)})
   }
 
   addClient(client){

@@ -9,35 +9,6 @@ const {HttpRequestHandler} = require("./HttpRequestHandler");
 const {BACKEND_SERVER} = require("./Config");
 const {ConnectionOperations} = require("./ConnectionOperations");
 
-async function answerLogin(clientsList, connection, loginRequest) {
-    let currentConnectionBoxId = loginRequest.boxId
-    try {
-        let url = BACKEND_SERVER + 'Admin/Station/getOneByPublicId/' + currentConnectionBoxId
-        let rs = await HttpRequestHandler.GET(url)
-        if (rs.finalResult == true) {
-            ConsoleMsgs.success("Client logged in successfully")
-            expressServer.addClient({boxId: currentConnectionBoxId, connection: connection})
-            let answer = LoginAnswer("0008", "01", '01', '11223344', "01")
-            try{
-                connection.write(Buffer.from(answer, 'hex'))
-            }catch (e){
-                ConsoleMsgs.error("could not write data to station")
-            }
-
-
-        } else {
-            console.log(rs)
-            ConsoleMsgs.error("Refusing station login due an error while communication with back end")
-            let answer = LoginAnswer("0008", "01", '01', '11223344', "00")
-            connection.write(Buffer.from(answer, 'hex'))
-        }
-    } catch (error) {
-        ConsoleMsgs.error(error)
-        ConsoleMsgs.error("Refusing station login due an error")
-        let answer = LoginAnswer("0008", "01", '01', '11223344', "00")
-        connection.write(Buffer.from(answer, 'hex'))
-    }
-}
 
 async function answerHeartBit (connection, buf, request){
     buf = Buffer.from('000761010011223344', 'hex');
@@ -64,8 +35,7 @@ const RequestEvents = {
         if (cmd != undefined) {
             console.log(cmd + " request entered, trying to answer")
             if (CmdExtractor(data) === CMDs.login) {
-                let loginRequest = LoginRequest(data)
-                await answerLogin(clientsList, connection, loginRequest)
+                ConsoleMsgs.error("Refusing login cause of forbidden time")
             } else {
                 if (await ConnectionOperations.isValid(clientsList, connection)) {
                     switch (cmd) {
