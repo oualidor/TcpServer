@@ -23,13 +23,13 @@ function answerHeartBit (connection, buf, request){
 
 function answerPowerBankReturn(connection,  stationRequest){
     try {
-        ConsoleMsgs.success("Answering PB return")
         let serverAnswer = ReturnPowerBank.serverAnswer("0009", "01","fa" , "11223344", "02", "01")
         console.log(serverAnswer)
         if(connection.write(serverAnswer)){
+            ConsoleMsgs.success("answer sent to station")
+        }else {
             ConsoleMsgs.error("could not send answer to station")
         }
-
     }catch (e){
         ConsoleMsgs.error(e)
     }
