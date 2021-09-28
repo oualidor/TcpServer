@@ -26,11 +26,33 @@ class SocketServer extends EventEmitter{
                 });
             })
 
+
+            connection.on("error", (error)=>{
+                ConsoleMsgs.debug(error)
+            })
+            connection.on("connect", ()=>{
+                ConsoleMsgs.debug("connect triggered")
+            })
             connection.on("end", ()=>{
-                console.log("client disconnected")
+                console.log("Connection ended, client disconnected")
                 //remove client
                 this.removeClientByConnection(connection)
             })
+
+            connection.on("timeout", ()=>{
+                ConsoleMsgs.debug("connect timout")
+            })
+
+            connection.on("lookup", (error, address, family, host)=>{
+                ConsoleMsgs.debug("connect lookup")
+            })
+            connection.on("drain",  ()=>{
+                ConsoleMsgs.debug("connect drain")
+            })
+            connection.on("close", (hadError)=>{
+                ConsoleMsgs.debug("connect close")
+            })
+
         });
         server.once('error', function(err) {
             console.log(err)
@@ -53,9 +75,6 @@ class SocketServer extends EventEmitter{
         server.on("end", ()=>{
             console.log("closed")
         } )
-
-
-
     }
 
     async  answerLogin(clientsList, connection, loginRequest) {
@@ -79,7 +98,6 @@ class SocketServer extends EventEmitter{
                 connection.write(Buffer.from(answer, 'hex'))
             }
         } catch (error) {
-            ConsoleMsgs.error(error)
             ConsoleMsgs.error("Refusing station login due an error")
             let answer = LoginAnswer("0008", "01", '01', '11223344', "00")
             connection.write(Buffer.from(answer, 'hex'))
