@@ -1,10 +1,30 @@
 const axios = require("axios")
+const {BACKEND_SERVER} = require("./Config");
+
+
+const ENDPOINT = BACKEND_SERVER + "Admin/login"
+let adminToken = ''
+try {
+    axios.post(ENDPOINT, {mail: "walid.khial@gmail.com"}).then(response => {
+        const data = response.data;
+        adminToken = data.token
+    })
+
+}catch (e){
+
+}
+
+
+
+
+
 const HttpRequestHandler = {
-    async GET(URL, adminToken) {
+    async GET(URL) {
         try{
             URL.replace(/[^a-zA-Z0-9]/g, "")
-            const request  = await axios({url: URL, method: "get", responseType: 'json'})
+            const request  = await axios({url: URL, method: "get",  headers: {'Content-Type': 'application/json', authorization: 'Bearer ' + adminToken}})
             const data = await request.data;
+            console.log(data)
             return data
         }catch (error){
             console.log(error)

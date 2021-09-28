@@ -9,7 +9,7 @@ const {RentPowerBankResult} = require("../Structures/RentPowerBankRequest");
 const {RentPowerBankRequest} = require("../Structures/RentPowerBankRequest");
 const {PowerBankQuery} = require("../Structures/PowerBankQuery");
 const StationRouters  = {
-    getInfo : async (req, res, clientsList) => {
+    QueryInfo : async (req, res, clientsList) => {
         let {boxId} = req.params
         let client = await ConnectionOperations.getClientByBoxId(clientsList, boxId)
         if(client == false){
@@ -32,7 +32,7 @@ const StationRouters  = {
         try {
             let { boxId } = req.params
             let client = await ConnectionOperations.getClientByBoxId(clientsList, boxId)
-            if (client == false) {
+            if (client == true) {
                 res.send({finalResult: false, error: "Station not logged in"})
             } else {
                 let requestAddress = BACKEND_SERVER+'Admin/Station/getRealTimeInfo/'+boxId

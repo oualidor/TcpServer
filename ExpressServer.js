@@ -19,6 +19,14 @@ class ExpressServer extends EventEmitter {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
     this.app.use(cookieParser());
+
+
+    this.app.once('error', function(err) {
+      if (err.code === 'EADDRINUSE') {
+        delete this
+      }
+    });
+
     this.app.listen(EXPRESS_PORT, () => {
       console.log(`EXPRESS RUNNING on PORT ${EXPRESS_PORT}.`)
     });
@@ -30,7 +38,7 @@ class ExpressServer extends EventEmitter {
     this.app.get("/HeartBitExpress", (req, res)=>{
       res.send({finalResult: true, result: "Test work"})
     })
-    this.app.get("/Station/QueryInfo/:boxId", (req, res)=>{ StationRouters.getInfo(req, res, this.clientsList)})
+    this.app.get("/Station/QueryInfo/:boxId", (req, res)=>{ StationRouters.QueryInfo(req, res, this.clientsList)})
     this.app.get("/Station/rent/:boxId", (req, res)=>{StationRouters.rentPowerBank(req, res, this.clientsList, ConnectionEvents.General)})
   }
 
