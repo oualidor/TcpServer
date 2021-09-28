@@ -72,7 +72,6 @@ class SocketServer extends EventEmitter{
             }
 
         });
-        server.re
 
         server.listen(TCP_PORT, HOST, () => {
             console.log(`TCP RUNNING on PORT: `+ TCP_PORT); // prints on start
