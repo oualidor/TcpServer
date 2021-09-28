@@ -2,6 +2,7 @@ const {HeartBitAnswer} = require("../Structures/HeartBitAnswer");
 
 const RequestOperations = require("./RequestOperations");
 const CMDs = require("./CMDs");
+const {ReturnPowerBank} = require("../Structures/ReturnPowerBank");
 const {ConsoleMsgs} = require("./ConsoleMsgs");
 const {LoginRequest} = require("../Structures/LoginRequest");
 const {CmdExtractor} = require("./RequestOperations");
@@ -20,9 +21,9 @@ function answerHeartBit (connection, buf, request){
 
 }
 
-async function answerPowerBankReturn(connection, buf, request){
-    buf = Buffer.from('00096601fa112233440003', 'hex');
-    connection.write(buf)
+async function answerPowerBankReturn(connection, buf, stationRequest){
+    let serverAnswer = ReturnPowerBank.serverAnswer("0009", "01", "fa", "11223344", stationRequest.slot, "03")
+    connection.write(serverAnswer)
 }
 
 async function getRentAnswer(data) {
@@ -54,7 +55,8 @@ const RequestEvents = {
                             getRentAnswer(data)
                             break
                         case CMDs.ReturnPowerBank:
-                            answerPowerBankReturn(connection, buf, null)
+                            let stationRequest = ReturnPowerBank.stationRequest(data)
+                            answerPowerBankReturn(connection, buf, stationRequest)
                             break
                     }
                 } else {
