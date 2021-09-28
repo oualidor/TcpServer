@@ -1,5 +1,6 @@
 const RequestOperations = require("./RequestOperations");
 const CMDs = require("./CMDs");
+const {ConsoleMsgs} = require("./ConsoleMsgs");
 const {LoginRequest} = require("../Structures/LoginRequest");
 const {CmdExtractor} = require("./RequestOperations");
 const {LoginAnswer} = require("../Structures/LoginAnswer");
@@ -13,18 +14,19 @@ async function answerLogin(clientsList, connection, loginRequest) {
     try {
         let url = BACKEND_SERVER + 'Admin/Station/getOne/' + currentConnectionBoxId
         let rs = await HttpRequestHandler.GET(url)
-        if (rs.finalResult) {
+        if (rs.finalResult == true) {
             console.log("Client logged in successfully")
             expressServer.addClient({boxId: currentConnectionBoxId, connection: connection})
             let answer = LoginAnswer("0008", "01", '01', '11223344', "01")
             connection.write(Buffer.from(answer, 'hex'))
         } else {
-            console.log("Refusing station login due an error while communication with back end")
+            console.log(rs)
+            ConsoleMsgs.error("Refusing station login due an error while communication with back end")
             let answer = LoginAnswer("0008", "01", '01', '11223344', "00")
             connection.write(Buffer.from(answer, 'hex'))
         }
     } catch (error) {
-        console.log("Refusing station login due an error")
+        ConsoleMsgs.error("Refusing station login due an error")
         let answer = LoginAnswer("0008", "01", '01', '11223344', "00")
         connection.write(Buffer.from(answer, 'hex'))
     }
