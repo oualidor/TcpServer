@@ -55,6 +55,7 @@ const RequestEvents = {
                             getRentAnswer(data)
                             break
                         case CMDs.ReturnPowerBank:
+                            console.log(data)
                             let stationRequest = ReturnPowerBank.stationRequest(data)
                             answerPowerBankReturn(connection, buf, stationRequest)
                             break
