@@ -1,7 +1,7 @@
 const RequestOperations = require("./RequestOperations");
 const CMDs = require("./CMDs");
 const {RequestEvents} = require("./RequestEvents");
-const {PowerBankQueries} = require("../Structures/PowerBankQuery");
+const {PowerBankQueries} = require("../Structures/PowerBankQueries");
 const ConnectionEvents = {
     General : (clientsList, connection, data) =>{
         // run this when data is received
