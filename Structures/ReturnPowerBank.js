@@ -2,6 +2,7 @@ const Converter = require("../Apis/Coverter");
 const CMDs = require("../Apis/CMDs");
 const ReturnPowerBank = {
     serverAnswer : (PackLen, Version, CheckSum, Token, Slot, Result)=>{
+        console.log(PackLen+CMDs.ReturnPowerBank+Version+CheckSum+Token+Slot+Result)
         return Buffer.from(PackLen+CMDs.ReturnPowerBank+Version+CheckSum+Token+Slot+Result);
     },
     stationRequest:  (data)=>{
