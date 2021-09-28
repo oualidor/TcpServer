@@ -1,3 +1,5 @@
+import {HeartBitAnswer} from "../Structures/HeartBitAnswer";
+
 const RequestOperations = require("./RequestOperations");
 const CMDs = require("./CMDs");
 const {ConsoleMsgs} = require("./ConsoleMsgs");
@@ -9,14 +11,17 @@ const {HttpRequestHandler} = require("./HttpRequestHandler");
 const {BACKEND_SERVER} = require("./Config");
 const {ConnectionOperations} = require("./ConnectionOperations");
 
+function answerHeartBit (connection, buf, request){
+    try {
+        connection.write(HeartBitAnswer("0007", "01", '00', '11223344'))
+    }catch (err){
+        ConsoleMsgs.error("Faild to send heart Bit answer")
+    }
 
-async function answerHeartBit (connection, buf, request){
-    buf = Buffer.from('000761010011223344', 'hex');
-    connection.write(buf)
 }
 
 async function answerPowerBankReturn(connection, buf, request){
-    buf = Buffer.from('00096601fa112233440001', 'hex');
+    buf = Buffer.from('00096601fa112233440003', 'hex');
     connection.write(buf)
 }
 
