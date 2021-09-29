@@ -99,7 +99,7 @@ const StationRouters  = {
                         data = data.toString('hex');
                         let cmd = RequestOperations.CmdExtractor(data)
                         if (cmd != undefined) {
-                            if (cmd == CMDs.RentPowerBank) {
+                            if (cmd == CMDs.QueryAPN) {
                                 try{
                                     ConsoleMsgs.success("Query APN answer caught successfully")
                                     ConsoleMsgs.success("Setting data event to normal after Query APN only")
