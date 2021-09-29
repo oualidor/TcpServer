@@ -6,11 +6,10 @@ const {TCP_SESSIONS_TOKEN, TCP_VERSION} = require("../Apis/Config");
 
 const LoginQueries = {
 
-    serverAnswer : (CheckSum, Result) => {
-        let PackLen = dexToPackLen((CMDs.login+TCP_VERSION+CheckSum+TCP_SESSIONS_TOKEN+Result).length)
-        console.log("prepared answer is")
-        console.log(PackLen+CMDs.login+TCP_VERSION+CheckSum+TCP_SESSIONS_TOKEN+Result)
-        return Buffer.from(PackLen+CMDs.login+TCP_VERSION+CheckSum+TCP_SESSIONS_TOKEN+Result);
+    serverAnswer : async (CheckSum, Result) => {
+        let PackLen = await dexToPackLen((CMDs.login + TCP_VERSION + CheckSum + TCP_SESSIONS_TOKEN + Result).length)
+        console.log(PackLen + CMDs.login + TCP_VERSION + CheckSum + TCP_SESSIONS_TOKEN + Result)
+        return Buffer.from(PackLen + CMDs.login + TCP_VERSION + CheckSum + TCP_SESSIONS_TOKEN + Result, "hex");
     },
 
     stationRequest : (data) => {
