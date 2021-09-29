@@ -25,11 +25,11 @@ const ConnectionEvents = {
                 if (cmd == CMDs.PowerBankInfo) {
                     connection.on("data", data => {
                         data = data.toString('hex')
-                        ConsoleMsgs.success("Query info caught, Setting data event to general and sending data to user")
                         ConnectionEvents.General(clientsList, connection, data)
-                        res.send({finalResult: true, data: PowerBankQueries.PowerBankQueryResult(data)})
-                    })
 
+                    })
+                    ConsoleMsgs.success("Query info caught, Setting data event to general and sending data to user")
+                    res.send({finalResult: true, data: PowerBankQueries.PowerBankQueryResult(data)})
                 } else {
                     console.log("ignoring data cause waiting for query info only")
                 }
