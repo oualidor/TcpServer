@@ -1,6 +1,7 @@
 const express = require('express');
 const RequestOperations = require("../Apis/RequestOperations");
 const CMDs = require("../Apis/CMDs");
+const {ConsoleMsgs} = require("../Apis/ConsoleMsgs");
 const {ConnectionEvents} = require("../Apis/ConnectionEvents");
 const {BACKEND_SERVER} = require("../Apis/Config");
 const {HttpRequestHandler} = require("../Apis/HttpRequestHandler");
@@ -42,18 +43,24 @@ const StationRouters  = {
                     let connection = client.connection
                     if (rs.data.powerBanksList.length > 0) {
                         if (connection.write(RentPowerBankRequest("0008", "01", "8a", "11223344", rs.data.powerBanksList[0].slot))) {
+                            ConsoleMsgs.success("Power Banks request sent to user and compatible listener is on")
                             connection.on("data", data => {
                                 data = data.toString('hex');
                                 let cmd = RequestOperations.CmdExtractor(data)
                                 if (cmd != undefined) {
                                     if (cmd == CMDs.RentPowerBank) {
-                                        console.log("setting data trigger to normal")
-                                        connection.removeAllListeners("data")
-                                        connection.on("data", data => {
-                                            data = data.toString('hex')
-                                            ConnectionEvents.General(clientsList, connection, data)
-                                        })
-                                        res.send({finalResult: true, data: RentPowerBankResult(data)})
+                                        try{
+                                            ConsoleMsgs.success("Rent power bank answer caught successfully")
+                                            ConsoleMsgs.success("Setting data event to normal after power bank return only")
+                                            connection.on("data", data => {
+                                                data = data.toString('hex')
+                                                ConnectionEvents.General(clientsList, connection, data)
+                                            })
+                                            res.send({finalResult: true, data: RentPowerBankResult(data)})
+                                        }catch (e){
+                                            res.send({finalResult: false, error: e})
+                                        }
+
                                     } else {
                                         console.log("Ignoring data cause waiting for rent results only")
                                     }
