@@ -15,9 +15,9 @@ function answerHeartBit (connection){
 
 }
 
-async function answerPowerBankReturn(connection, stationRequest) {
+async function answerPowerBankReturn(connection, stationRequest, result) {
     try {
-        let serverAnswer = await ReturnPowerBank.serverAnswer("01", "fa", "11223344", stationRequest.slot, "01")
+        let serverAnswer = await ReturnPowerBank.serverAnswer("01", "fa", "11223344", stationRequest.slot, result)
         if (connection.write(serverAnswer)) {
             ConsoleMsgs.success("answer sent to station")
         } else {
@@ -60,7 +60,7 @@ const RequestEvents = {
                         case CMDs.ReturnPowerBank:
                             console.log(data)
                             let stationRequest = await ReturnPowerBank.stationRequest(data)
-                            answerPowerBankReturn(connection, stationRequest)
+                            answerPowerBankReturn(connection, stationRequest, "03")
                             break
                     }
                 } else {
