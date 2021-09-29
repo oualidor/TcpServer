@@ -92,7 +92,6 @@ const StationRouters  = {
             if (client == false) {
                 res.send({finalResult: false, error: "Station not logged in"})
             } else {
-                console.log(client)
                 let connection = client.connection
                 if (connection.write(QueryAPNQueries.serverRequest("8a", "01"))){
                     ConsoleMsgs.success("Query APN request sent to user and compatible listener is on")
@@ -109,9 +108,8 @@ const StationRouters  = {
                                         data = data.toString('hex')
                                         ConnectionEvents.General(clientsList, connection, data)
                                     })
-                                    res.send({finalResult: true, data: QueryAPNQueries.StationAnswer(data)})
+                                    res.send({finalResult: true, data: QueryAPNQueries.stationAnswer(data)})
                                 }catch (e){
-                                    console.log(e)
                                     res.send({finalResult: false, error: "intern error"})
                                 }
                             } else {
