@@ -52,6 +52,7 @@ const StationRouters  = {
                                         try{
                                             ConsoleMsgs.success("Rent power bank answer caught successfully")
                                             ConsoleMsgs.success("Setting data event to normal after power bank return only")
+                                            connection.removeAllListeners("data")
                                             connection.on("data", data => {
                                                 data = data.toString('hex')
                                                 ConnectionEvents.General(clientsList, connection, data)
