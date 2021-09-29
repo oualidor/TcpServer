@@ -88,8 +88,12 @@ class SocketServer extends EventEmitter{
                 this.addClient({boxId: currentConnectionBoxId, connection: connection})
                 let answer = LoginQueries.serverAnswer("0008", "01")
                 try{
-                    connection.write(Buffer.from(answer, 'hex'))
-                    ConsoleMsgs.success("Client logged in successfully")
+                    if(connection.write(answer)){
+                        ConsoleMsgs.success("Client logged in successfully")
+                    }else {
+                        ConsoleMsgs.error("Could not send login answer to Station")
+                        this.removeClientByConnection(connection)
+                    }
                 }catch (e){
                     ConsoleMsgs.error("could not write data to station")
                 }

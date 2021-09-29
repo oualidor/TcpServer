@@ -8,7 +8,9 @@ const LoginQueries = {
 
     serverAnswer : (CheckSum, Result) => {
         let PackLen = dexToPackLen((CMDs.login+TCP_VERSION+CheckSum+TCP_SESSIONS_TOKEN+Result).length)
-        return (PackLen+CMDs.login+TCP_VERSION+CheckSum+TCP_SESSIONS_TOKEN+Result);
+        console.log("prepared answer is")
+        console.log(PackLen+CMDs.login+TCP_VERSION+CheckSum+TCP_SESSIONS_TOKEN+Result)
+        return Buffer.from(PackLen+CMDs.login+TCP_VERSION+CheckSum+TCP_SESSIONS_TOKEN+Result);
     },
 
     stationRequest : (data) => {
