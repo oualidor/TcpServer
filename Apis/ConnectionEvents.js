@@ -16,6 +16,7 @@ const ConnectionEvents = {
     },
 
     PowerBankQuery : (clientsList, connection, res) =>{
+        connection.removeAllListeners("data")
         ConsoleMsgs.success("Setting data event to wait for query info only")
         connection.on("data", data => {
             data = data.toString("hex")
