@@ -1,5 +1,6 @@
 const RequestOperations = require("./RequestOperations");
 const CMDs = require("./CMDs");
+const {ConsoleMsgs} = require("./ConsoleMsgs");
 const {RequestEvents} = require("./RequestEvents");
 const {PowerBankQueries} = require("../Structures/PowerBankQueries");
 const ConnectionEvents = {
@@ -15,20 +16,21 @@ const ConnectionEvents = {
     },
 
     PowerBankQuery : (clientsList, connection, res) =>{
+        ConsoleMsgs.success("Setting data event to wait for query info only")
         connection.on("data", data => {
             data = data.toString("hex")
             let cmd = RequestOperations.CmdExtractor(data)
             if (cmd != undefined) {
                 if (cmd == CMDs.PowerBankInfo) {
-                    console.log("setting data trigger to normal")
-                    connection.removeAllListeners("data")
                     connection.on("data", data => {
                         data = data.toString('hex')
+                        ConsoleMsgs.success("Query info caught, Setting data event to general and sending data to user")
                         ConnectionEvents.General(clientsList, connection, data)
+                        res.send({finalResult: true, data: PowerBankQueries.PowerBankQueryResult(data)})
                     })
-                    res.send({finalResult: true, data: PowerBankQueries.PowerBankQueryResult(data)})
+
                 } else {
-                    console.log("ignoring data cause waiting for specific")
+                    console.log("ignoring data cause waiting for query info only")
                 }
             }
         })
