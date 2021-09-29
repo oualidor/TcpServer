@@ -92,6 +92,7 @@ const StationRouters  = {
             if (client == false) {
                 res.send({finalResult: false, error: "Station not logged in"})
             } else {
+                alert(client)
                 let connection = client.connection
                 if (connection.write(QueryAPNQueries.serverRequest("8a", "01"))){
                     ConsoleMsgs.success("Query APN request sent to user and compatible listener is on")
@@ -110,7 +111,7 @@ const StationRouters  = {
                                     })
                                     res.send({finalResult: true, data: QueryAPNQueries.StationAnswer(data)})
                                 }catch (e){
-                                    res.send({finalResult: false, error: e})
+                                    res.send({finalResult: false, error: "intern error"})
                                 }
                             } else {
                                 console.log("Ignoring data cause waiting for Query APN results only")
