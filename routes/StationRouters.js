@@ -92,7 +92,7 @@ const StationRouters  = {
             if (client == false) {
                 res.send({finalResult: false, error: "Station not logged in"})
             } else {
-                alert(client)
+                console.log(client)
                 let connection = client.connection
                 if (connection.write(QueryAPNQueries.serverRequest("8a", "01"))){
                     ConsoleMsgs.success("Query APN request sent to user and compatible listener is on")
