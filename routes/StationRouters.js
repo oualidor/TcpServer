@@ -1,6 +1,5 @@
-const express = require('express');
 const RequestOperations = require("../Apis/RequestOperations");
-const CMDs = require("../Apis/CMDs");
+const {CMDs} = require("../Apis/CMDs");
 const {RentPowerBankQueries} = require("../Structures/RentPowerBankQueries");
 const {ConsoleMsgs} = require("../Apis/ConsoleMsgs");
 const {ConnectionEvents} = require("../Apis/ConnectionEvents");

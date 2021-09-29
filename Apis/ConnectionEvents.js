@@ -1,5 +1,5 @@
 const RequestOperations = require("./RequestOperations");
-const CMDs = require("./CMDs");
+const {CMDs} = require("./CMDs");
 const {ConsoleMsgs} = require("./ConsoleMsgs");
 const {RequestEvents} = require("./RequestEvents");
 const {PowerBanksInfoQueries} = require("../Structures/PowerBanksInfoQueries");

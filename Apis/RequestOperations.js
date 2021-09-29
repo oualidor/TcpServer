@@ -1,4 +1,4 @@
-const CMDs = require("./CMDs")
+const {CMDs} = require("./CMDs")
 function CmdExtractor(data){
     let cmd = data.substr(4, 2)
     return cmd

@@ -1,13 +1,31 @@
-//Login
-//0020 60 01 88 11223344 55667788 0233 0011 524c314830383139303632303031313700
-//0008 60 01 01 11223344 01
-
-//heartBit
-//0007 61 01 00 11223344
-//0007 61 01 00 11223344
-
-//Return
-//0010 66 01 9f 11223344 02 594c424895000611
-//0009 66 01 fa 11223344 02 01
+const Converter = require("../Apis/Coverter")
+const {CMDs} = require("../Apis/CMDs");
+const {dexToPackLen} = require("../Apis/Coverter");
+const {TCP_SESSIONS_TOKEN, TCP_VERSION} = require("../Apis/Config");
 
 
+const QueryAPNQueries = {
+    serverRequest : (CheckSum, index) => {
+        let PackLen = dexToPackLen((CMDs.QueryAPN + TCP_VERSION + CheckSum + TCP_SESSIONS_TOKEN + Result).length)
+        return Buffer.from(PackLen + CMDs.login + TCP_VERSION + CheckSum + TCP_SESSIONS_TOKEN + Result, "hex");
+    },
+    stationAnswer : (data) => {
+        return ({
+            length: parseInt(data.substr(0, 4), 16 *2),
+            cmd: data.substr(4, 2),
+            version: data.substr(6, 2),
+            checkSum: data.substr(8, 2),
+            token: data.substr(10, 8),
+            random: data.substr(18, 8),
+            magic: data.substr(26, 4),
+            boxIdLength: parseInt(data.substr(30, 4), 16)*2,
+            encryptedBoxId: data.substr(34, this.boxIdLength),
+            boxId: Converter.hexToString(data.substr(34, this.boxIdLength)).replace(/[^a-zA-Z0-9]/g, "")
+        })
+    }
+}
+
+
+
+
+module.exports = { QueryAPNQueries }

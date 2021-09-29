@@ -1,5 +1,5 @@
 const Converter = require("../Apis/Coverter");
-const CMDs = require("../Apis/CMDs");
+const {CMDs} = require("../Apis/CMDs");
 const {dexToPackLen} = require("../Apis/Coverter");
 const ReturnPowerBank = {
     serverAnswer : (Version, CheckSum, Token, Slot, Result)=>{

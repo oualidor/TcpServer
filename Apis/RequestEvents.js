@@ -1,7 +1,7 @@
 const {HeartBitAnswer} = require("../Structures/HeartBitAnswer");
 
 const RequestOperations = require("./RequestOperations");
-const CMDs = require("./CMDs");
+const {CMDs} = require("./CMDs");
 const {ReturnPowerBank} = require("../Structures/ReturnPowerBank");
 const {ConsoleMsgs} = require("./ConsoleMsgs");
 const {CmdExtractor} = require("./RequestOperations");

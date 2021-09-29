@@ -1,5 +1,4 @@
-const Converter = require("../Apis/Coverter")
-const CMDs = require( "../Apis/CMDs");
+const {CMDs} = require( "../Apis/CMDs");
 
 const PowerBanksInfoQueries = {
     serverQuery : (PackLen, Version, CheckSum, Token) => {
