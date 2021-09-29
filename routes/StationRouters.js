@@ -1,13 +1,12 @@
 const express = require('express');
 const RequestOperations = require("../Apis/RequestOperations");
 const CMDs = require("../Apis/CMDs");
+const {RentPowerBankQueries} = require("../Structures/RentPowerBankQueries");
 const {ConsoleMsgs} = require("../Apis/ConsoleMsgs");
 const {ConnectionEvents} = require("../Apis/ConnectionEvents");
 const {BACKEND_SERVER} = require("../Apis/Config");
 const {HttpRequestHandler} = require("../Apis/HttpRequestHandler");
 const {ConnectionOperations} = require("../Apis/ConnectionOperations");
-const {RentPowerBankResult} = require("../Structures/RentPowerBankRequest");
-const {RentPowerBankRequest} = require("../Structures/RentPowerBankRequest");
 const {PowerBankQueries} = require("../Structures/PowerBankQueries");
 
 const StationRouters  = {
@@ -42,7 +41,7 @@ const StationRouters  = {
                 if (rs.finalResult == true) {
                     let connection = client.connection
                     if (rs.data.powerBanksList.length > 0) {
-                        if (connection.write(RentPowerBankRequest("0008", "01", "8a", "11223344", rs.data.powerBanksList[0].slot))) {
+                        if (connection.write(RentPowerBankQueries.serverRequest("0008", "01", "8a", "11223344", rs.data.powerBanksList[0].slot))) {
                             ConsoleMsgs.success("Power Banks request sent to user and compatible listener is on")
                             connection.on("data", data => {
                                 data = data.toString('hex');
