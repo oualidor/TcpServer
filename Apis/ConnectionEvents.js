@@ -34,6 +34,10 @@ const ConnectionEvents = {
                 } else {
                     console.log("ignoring data cause waiting for query info only")
                 }
+            }else {
+                ConsoleMsgs.error("Cmd is undefined, kicking out teh client")
+                connection.terminate()
+                res.send({finalResult: false, error: "Operation result in kicking gout teh client fro un allowed request"})
             }
         })
     }
