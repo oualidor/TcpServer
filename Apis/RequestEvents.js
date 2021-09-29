@@ -15,15 +15,15 @@ function answerHeartBit (connection){
 
 }
 
-function answerPowerBankReturn(connection,  stationRequest){
+async function answerPowerBankReturn(connection, stationRequest) {
     try {
-        let serverAnswer = ReturnPowerBank.serverAnswer( "01","fa" , "11223344", stationRequest.slot, "01")
-        if(connection.write(serverAnswer)){
+        let serverAnswer = await ReturnPowerBank.serverAnswer("01", "fa", "11223344", stationRequest.slot, "01")
+        if (connection.write(serverAnswer)) {
             ConsoleMsgs.success("answer sent to station")
-        }else {
+        } else {
             ConsoleMsgs.error("could not send answer to station")
         }
-    }catch (e){
+    } catch (e) {
         ConsoleMsgs.error(e)
     }
 }
