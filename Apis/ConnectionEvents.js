@@ -5,6 +5,7 @@ const {RequestEvents} = require("./RequestEvents");
 const {PowerBankQueries} = require("../Structures/PowerBankQueries");
 const ConnectionEvents = {
     General : (clientsList, connection, data) =>{
+        connection.removeAllListeners("data")
         // run this when data is received
         if (data == undefined || data == null) {console.log("no data found")}
         const dataArgs = data.toString().split(" "); // splits the data into spaces
