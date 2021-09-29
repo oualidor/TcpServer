@@ -5,12 +5,10 @@ const {TCP_SESSIONS_TOKEN, TCP_VERSION} = require("../Apis/Config");
 
 
 const LoginQueries = {
-
     serverAnswer : (CheckSum, Result) => {
         let PackLen = dexToPackLen((CMDs.login + TCP_VERSION + CheckSum + TCP_SESSIONS_TOKEN + Result).length)
         return Buffer.from(PackLen + CMDs.login + TCP_VERSION + CheckSum + TCP_SESSIONS_TOKEN + Result, "hex");
     },
-
     stationRequest : (data) => {
         return ({
             length: parseInt(data.substr(0, 4), 16 *2),
@@ -25,7 +23,6 @@ const LoginQueries = {
             boxId: Converter.hexToString(data.substr(34, this.boxIdLength)).replace(/[^a-zA-Z0-9]/g, "")
         })
     }
-
 }
 
 
