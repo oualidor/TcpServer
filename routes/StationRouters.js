@@ -1,4 +1,5 @@
 const RequestOperations = require("../Apis/RequestOperations");
+const {QueryAPNQueries} = require("../Structures/QueryAPNQueries");
 const {CMDs} = require("../Apis/CMDs");
 const {RentPowerBankQueries} = require("../Structures/RentPowerBankQueries");
 const {ConsoleMsgs} = require("../Apis/ConsoleMsgs");
@@ -29,6 +30,7 @@ const StationRouters  = {
             }
         }
     },
+
     rentPowerBank : async (req, res, clientsList) => {
         try {
             let { boxId } = req.params
@@ -81,7 +83,49 @@ const StationRouters  = {
         } catch (error) {
             res.send({finaResult: false, error: "could not query station for info"})
         }
+    },
+
+    QueryAPN :  (req, res, clientsList) => {
+        try {
+            let { boxId } = req.params
+            let client =  ConnectionOperations.getClientByBoxId(clientsList, boxId)
+            if (client == false) {
+                res.send({finalResult: false, error: "Station not logged in"})
+            } else {
+                let connection = client.connection
+                if (connection.write(QueryAPNQueries.serverRequest("8a"))){
+                    ConsoleMsgs.success("Query APN request sent to user and compatible listener is on")
+                    connection.on("data", data => {
+                        data = data.toString('hex');
+                        let cmd = RequestOperations.CmdExtractor(data)
+                        if (cmd != undefined) {
+                            if (cmd == CMDs.RentPowerBank) {
+                                try{
+                                    ConsoleMsgs.success("Query APN answer caught successfully")
+                                    ConsoleMsgs.success("Setting data event to normal after Query APN only")
+                                    connection.removeAllListeners("data")
+                                    connection.on("data", data => {
+                                        data = data.toString('hex')
+                                        ConnectionEvents.General(clientsList, connection, data)
+                                    })
+                                    res.send({finalResult: true, data: QueryAPNQueries.StationAnswer(data)})
+                                }catch (e){
+                                    res.send({finalResult: false, error: e})
+                                }
+                            } else {
+                                console.log("Ignoring data cause waiting for rent results only")
+                            }
+                        }
+                    })
+                } else {
+                    res.send({finaResult: false, error: "could not send rent request"})
+                }
+            }
+        } catch (error) {
+            res.send({finaResult: false, error: "could not query station for info"})
+        }
     }
+
     }
 
 

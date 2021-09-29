@@ -9,7 +9,7 @@ const ConnectionOperations = {
         return false
     },
 
-    getClientByBoxId : async (clientsList, boxId)=> {
+    getClientByBoxId :  (clientsList, boxId)=> {
         try{
             if ((clientsList == undefined) || (clientsList.length == 0)) return false
             for (let i=0; i<clientsList.length; i++){
