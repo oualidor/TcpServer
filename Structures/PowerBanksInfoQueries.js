@@ -1,7 +1,7 @@
 const Converter = require("../Apis/Coverter")
 const CMDs = require( "../Apis/CMDs");
 
-const PowerBankQueries = {
+const PowerBanksInfoQueries = {
     serverQuery : (PackLen, Version, CheckSum, Token) => {
         return Buffer.from(PackLen+CMDs.PowerBankInfo+Version+CheckSum+Token, "hex");
     },
@@ -27,4 +27,4 @@ const PowerBankQueries = {
 
 };
 
-module.exports = { PowerBankQueries}
+module.exports = { PowerBanksInfoQueries}

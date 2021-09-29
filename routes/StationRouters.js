@@ -7,7 +7,7 @@ const {ConnectionEvents} = require("../Apis/ConnectionEvents");
 const {BACKEND_SERVER} = require("../Apis/Config");
 const {HttpRequestHandler} = require("../Apis/HttpRequestHandler");
 const {ConnectionOperations} = require("../Apis/ConnectionOperations");
-const {PowerBankQueries} = require("../Structures/PowerBankQueries");
+const {PowerBanksInfoQueries} = require("../Structures/PowerBanksInfoQueries");
 
 const StationRouters  = {
     QueryInfo : async (req, res, clientsList) => {
@@ -18,7 +18,8 @@ const StationRouters  = {
         }else {
             let connection  = client.connection
             try{
-                if (connection.write(PowerBankQueries.serverQuery("0007", "01", "8a", "11223344"))) {
+                if (connection.write(PowerBanksInfoQueries.serverQuery("0007", "01", "8a", "11223344"))) {
+                    ConsoleMsgs.debug("PowerBanksInfoQueries sent ")
                     ConnectionEvents.PowerBankQuery(clientsList, connection, res)
                 } else {
                     res.send({finalResult: false, error: "Failed to send request to station"})

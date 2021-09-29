@@ -2,7 +2,7 @@ const RequestOperations = require("./RequestOperations");
 const CMDs = require("./CMDs");
 const {ConsoleMsgs} = require("./ConsoleMsgs");
 const {RequestEvents} = require("./RequestEvents");
-const {PowerBankQueries} = require("../Structures/PowerBankQueries");
+const {PowerBanksInfoQueries} = require("../Structures/PowerBanksInfoQueries");
 const ConnectionEvents = {
     General : (clientsList, connection, data) =>{
         // run this when data is received
@@ -32,7 +32,7 @@ const ConnectionEvents = {
                             ConnectionEvents.General(clientsList, connection, data)
                         })
                         ConsoleMsgs.success("Query info caught, Setting data event to general and sending data to user")
-                        res.send({finalResult: true, data: PowerBankQueries.PowerBankQueryResult(data)})
+                        res.send({finalResult: true, data: PowerBanksInfoQueries.PowerBankQueryResult(data)})
                     } else {
                         console.log("ignoring data cause waiting for query info only")
                     }
