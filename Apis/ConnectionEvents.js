@@ -23,12 +23,13 @@ const ConnectionEvents = {
                 data = data.toString("hex")
                 let cmd = RequestOperations.CmdExtractor(data)
                 if (cmd != undefined) {
+                    ConsoleMsgs.debug("cmd")
                     if (cmd == CMDs.PowerBankInfo) {
+                        ConsoleMsgs.debug("correct cmd found")
                         connection.removeAllListeners("data")
                         connection.on("data", data => {
                             data = data.toString('hex')
                             ConnectionEvents.General(clientsList, connection, data)
-
                         })
                         ConsoleMsgs.success("Query info caught, Setting data event to general and sending data to user")
                         res.send({finalResult: true, data: PowerBankQueries.PowerBankQueryResult(data)})
