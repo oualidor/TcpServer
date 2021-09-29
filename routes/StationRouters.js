@@ -93,7 +93,7 @@ const StationRouters  = {
                 res.send({finalResult: false, error: "Station not logged in"})
             } else {
                 let connection = client.connection
-                if (connection.write(QueryAPNQueries.serverRequest("8a"))){
+                if (connection.write(QueryAPNQueries.serverRequest("8a", "01"))){
                     ConsoleMsgs.success("Query APN request sent to user and compatible listener is on")
                     connection.on("data", data => {
                         data = data.toString('hex');
@@ -113,7 +113,7 @@ const StationRouters  = {
                                     res.send({finalResult: false, error: e})
                                 }
                             } else {
-                                console.log("Ignoring data cause waiting for rent results only")
+                                console.log("Ignoring data cause waiting for Query APN results only")
                             }
                         }
                     })
