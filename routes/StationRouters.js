@@ -111,6 +111,7 @@ const StationRouters  = {
                                     })
                                     res.send({finalResult: true, data: QueryAPNQueries.StationAnswer(data)})
                                 }catch (e){
+                                    console.log(e)
                                     res.send({finalResult: false, error: "intern error"})
                                 }
                             } else {
