@@ -6,19 +6,18 @@ const {ReturnPowerBank} = require("../Structures/ReturnPowerBank");
 const {ConsoleMsgs} = require("./ConsoleMsgs");
 const {CmdExtractor} = require("./RequestOperations");
 const {ConnectionOperations} = require("./ConnectionOperations");
-
 function answerHeartBit (connection){
     try {
         connection.write(HeartBitAnswer("0007", "01", '00', '11223344'))
     }catch (err){
-        ConsoleMsgs.error("Faild to send heart Bit answer")
+        ConsoleMsgs.error("Failed to send heart Bit answer")
     }
 
 }
 
 function answerPowerBankReturn(connection,  stationRequest){
     try {
-        let serverAnswer = ReturnPowerBank.serverAnswer( "01","fa" , "11223344", stationRequest.slot, "01")
+        let serverAnswer = ReturnPowerBank.serverAnswer( "01",stationRequest.checkSum , "11223344", stationRequest.slot, "01")
         console.log(serverAnswer)
         if(connection.write(serverAnswer)){
             ConsoleMsgs.success("answer sent to station")
@@ -30,7 +29,6 @@ function answerPowerBankReturn(connection,  stationRequest){
     }
 }
 
-
 async function getRentAnswer(data) {
     console.log(data)
 }
@@ -39,6 +37,7 @@ async function getPBQueryAnswer(data) {
     console.log("power bank info coming")
     console.log(data)
 }
+
 const RequestEvents = {
     answerRequest : async (clientsList, connection, data) => {
         let buf
@@ -61,7 +60,7 @@ const RequestEvents = {
                             break
                         case CMDs.ReturnPowerBank:
                             console.log(data)
-                            let stationRequest = ReturnPowerBank.stationRequest(data)
+                            let stationRequest = await ReturnPowerBank.stationRequest(data)
                             answerPowerBankReturn(connection, stationRequest)
                             break
                     }
