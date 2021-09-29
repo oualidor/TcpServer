@@ -5,7 +5,6 @@ const ReturnPowerBank = {
     serverAnswer : (Version, CheckSum, Token, Slot, Result)=>{
         let PackLen = CMDs.ReturnPowerBank+Version+CheckSum+Token+Slot+Result
         PackLen = dexToPackLen(PackLen.length)
-        console.log(PackLen+CMDs.ReturnPowerBank+Version+CheckSum+Token+Slot+Result)
         return Buffer.from(PackLen+CMDs.ReturnPowerBank+Version+CheckSum+Token+Slot+Result, "hex");
     },
     stationRequest:  (data)=>{
