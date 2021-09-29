@@ -108,6 +108,7 @@ const StationRouters  = {
                                         data = data.toString('hex')
                                         ConnectionEvents.General(clientsList, connection, data)
                                     })
+                                    console.log(data)
                                     res.send({finalResult: true, data: QueryAPNQueries.stationAnswer(data)})
                                 }catch (e){
                                     res.send({finalResult: false, error: "intern error"})
