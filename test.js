@@ -11,5 +11,5 @@
 //0009 66 01 fa 11223344 02 01
 
 //console.log(parseInt("fa", 16 ))
+const {LoginAnswer} = require("./Structures/LoginAnswer");
 const {LoginRequest} = require("./Structures/LoginRequest");
-console.log(LoginRequest("0020600188112233445566778802330011524c314830383139303632303031313700"))

@@ -12,5 +12,8 @@ const adminMail = "walid.khial@gmail.com"
 const adminPassword  ="";
 const jwtPrivateKey = "lkjlfngrpgjefvml,s:;vnsomvfijv";
 
+const TCP_SESSIONS_TOKEN = "11223344"
+const TCP_VERSION = "01"
 
-module.exports = {TCP_PORT, HOST, EXPRESS_PORT, BACKEND_SERVER, adminMail, adminPassword, jwtPrivateKey}
+
+module.exports = {TCP_PORT, HOST, EXPRESS_PORT, BACKEND_SERVER, TCP_SESSIONS_TOKEN, TCP_VERSION, adminMail, adminPassword, jwtPrivateKey}
