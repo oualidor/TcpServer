@@ -1,7 +1,7 @@
 const net = require("net");
 const EventEmitter = require('events')
-const {LoginAnswer} = require("./Structures/LoginAnswer");
-const {LoginRequest} = require("./Structures/LoginRequest");
+const {LoginQueries} = require("./Structures/LoginQueries");
+const {LoginAnswer} = require("./Structures/LoginQueries");
 const {HttpRequestHandler} = require("./Apis/HttpRequestHandler");
 const {BACKEND_SERVER} = require("./Apis/Config");
 const {ConsoleMsgs} = require("./Apis/ConsoleMsgs");
@@ -19,8 +19,8 @@ class SocketServer extends EventEmitter{
             ConsoleMsgs.debug("Client handshake")
             socket.once("data", (data)=>{
                 data = data.toString("hex")
-                let loginRequest = LoginRequest(data)
-                this.answerLogin(this.clientsList, socket, loginRequest)
+                let loginStationRequest = LoginQueries.stationRequest(data)
+                this.answerLogin(this.clientsList, socket, loginStationRequest)
                 socket.on("data", data => {
                     data = data.toString("hex")
                     ConnectionEvents.General(this.clientsList , socket, data)
@@ -86,7 +86,7 @@ class SocketServer extends EventEmitter{
             let rs = await HttpRequestHandler.GET(url)
             if (rs.finalResult == true) {
                 this.addClient({boxId: currentConnectionBoxId, connection: connection})
-                let answer = LoginAnswer("0008", "01")
+                let answer = LoginQueries.serverAnswer("0008", "01")
                 try{
                     connection.write(Buffer.from(answer, 'hex'))
                     ConsoleMsgs.success("Client logged in successfully")

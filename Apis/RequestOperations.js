@@ -1,24 +1,9 @@
-const LoginRequest = require( "../Structures/LoginRequest");
-
 const CMDs = require("./CMDs")
 function CmdExtractor(data){
     let cmd = data.substr(4, 2)
     return cmd
 
 }
-function RequestOperations(data){
-    let cmd = CmdExtractor(data)
-    if(cmd != undefined){
-        switch (cmd){
-            case CMDs:
-                return LoginRequest.LoginRequest(data)
-            break
-            case CMDs.heartBit:
-                return "hihihi"
-        }
-    }
-}
-
 
 function sendData(connection, dataString, encoding){
     let buf = Buffer.from(dataString, 'hex');
@@ -27,5 +12,5 @@ function sendData(connection, dataString, encoding){
 }
 
 
-module.exports = { CmdExtractor,  RequestOperations, sendData}
+module.exports = { CmdExtractor, sendData}
 

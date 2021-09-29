@@ -10,6 +10,4 @@
 //0010 66 01 9f 11223344 02 594c424895000611
 //0009 66 01 fa 11223344 02 01
 
-//console.log(parseInt("fa", 16 ))
-const {LoginAnswer} = require("./Structures/LoginAnswer");
-const {LoginRequest} = require("./Structures/LoginRequest");
+
