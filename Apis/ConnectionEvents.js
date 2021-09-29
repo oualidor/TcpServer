@@ -21,6 +21,7 @@ const ConnectionEvents = {
         connection.on("data", data => {
             try {
                 data = data.toString("hex")
+                console.log(data)
                 let cmd = RequestOperations.CmdExtractor(data)
                 if (cmd != undefined) {
                     ConsoleMsgs.debug("cmd")
