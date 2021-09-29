@@ -86,7 +86,7 @@ class SocketServer extends EventEmitter{
             let rs = await HttpRequestHandler.GET(url)
             if (rs.finalResult == true) {
                 this.addClient({boxId: currentConnectionBoxId, connection: connection})
-                let answer = LoginQueries.serverAnswer("0008", "01")
+                let answer = LoginQueries.serverAnswer("01", "01")
                 try{
                     if(connection.write(answer)){
                         ConsoleMsgs.success("Client logged in successfully")
