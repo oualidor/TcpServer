@@ -60,7 +60,7 @@ const RequestEvents = {
                         case CMDs.ReturnPowerBank:
                             console.log(data)
                             let stationRequest = await ReturnPowerBank.stationRequest(data)
-                            answerPowerBankReturn(connection, stationRequest, "03")
+                            answerPowerBankReturn(connection, stationRequest, "00")
                             break
                     }
                 } else {
