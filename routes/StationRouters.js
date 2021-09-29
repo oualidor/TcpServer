@@ -87,13 +87,13 @@ const StationRouters  = {
 
     QueryAPN :  (req, res, clientsList) => {
         try {
-            let { boxId } = req.params
+            let { boxId, APNIndex } = req.params
             let client =  ConnectionOperations.getClientByBoxId(clientsList, boxId)
             if (client == false) {
                 res.send({finalResult: false, error: "Station not logged in"})
             } else {
                 let connection = client.connection
-                if (connection.write(QueryAPNQueries.serverRequest("8a", "01"))){
+                if (connection.write(QueryAPNQueries.serverRequest("8a", APNIndex))){
                     ConsoleMsgs.success("Query APN request sent to user and compatible listener is on")
                     connection.on("data", data => {
                         data = data.toString('hex');

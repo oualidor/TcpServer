@@ -40,7 +40,7 @@ class ExpressServer extends EventEmitter {
     })
     this.app.get("/Station/QueryInfo/:boxId", (req, res)=>{ StationRouters.QueryInfo(req, res, this.clientsList)})
     this.app.get("/Station/rent/:boxId", (req, res)=>{StationRouters.rentPowerBank(req, res, this.clientsList)})
-    this.app.get("/Station/QueryAPN/:boxId", (req, res)=>{StationRouters.QueryAPN(req, res, this.clientsList)})
+    this.app.get("/Station/QueryAPN/:boxId/:APNIndex", (req, res)=>{StationRouters.QueryAPN(req, res, this.clientsList)})
   }
 
   addClient(client){
