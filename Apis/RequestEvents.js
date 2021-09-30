@@ -22,7 +22,7 @@ async function answerPowerBankReturn(clientsList, connection, stationRequest, re
         let serverAnswer = await ReturnPowerBank.serverAnswer("01", "fa", "11223344", stationRequest.slot, result)
         if (connection.write(serverAnswer)) {
             ConsoleMsgs.success("answer sent to station")
-            let currentStation = ConnectionOperations.getClientByConnection(clientsList, connection)
+            let currentStation =  await ConnectionOperations.getClientByConnection(clientsList, connection)
             let url = BACKEND_SERVER + 'Admin/Station/returnPowerBank/'
             let reqData = {
                 "StationId": currentStation.boxId,
