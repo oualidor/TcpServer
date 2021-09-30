@@ -19,6 +19,7 @@ async function answerPowerBankReturn(connection, stationRequest, result) {
     try {
         let serverAnswer = await ReturnPowerBank.serverAnswer("01", "fa", "11223344", stationRequest.slot, result)
         if (connection.write(serverAnswer)) {
+
             ConsoleMsgs.success("answer sent to station")
         } else {
             ConsoleMsgs.error("could not send answer to station")
