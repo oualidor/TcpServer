@@ -33,7 +33,8 @@ async function answerPowerBankReturn(clientsList, connection, stationRequest, re
             if (rs.finalResult == true) {
 
             }else {
-                ConsoleMsgs.error(rs)
+                ConsoleMsgs.error(JSON.stringify(rs))
+
             }
         } else {
             ConsoleMsgs.error("could not send answer to station")
