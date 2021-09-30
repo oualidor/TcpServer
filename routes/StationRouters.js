@@ -69,7 +69,7 @@ const StationRouters  = {
                                 }
                             })
                         } else {
-                            res.send({finaResult: false, error: "could not send rent request"})
+                            res.send({finalResult: false, error: "could not send rent request"})
                         }
                     } else {
                         res.send({finaResult: false, error: "no available power banks on station"})
