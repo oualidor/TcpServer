@@ -35,12 +35,10 @@ async function answerPowerBankReturn(clientsList, connection, stationRequest, re
                     ConsoleMsgs.success("Transaction recorded")
                 }else {
                     ConsoleMsgs.error(JSON.stringify(rs))
-
                 }
             }else {
                 ConsoleMsgs.error("could not send answer to station")
             }
-
         } else {
             ConsoleMsgs.error("could not send answer to station")
         }
