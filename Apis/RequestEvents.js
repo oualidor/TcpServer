@@ -23,19 +23,24 @@ async function answerPowerBankReturn(clientsList, connection, stationRequest, re
         if (connection.write(serverAnswer)) {
             ConsoleMsgs.success("answer sent to station")
             let currentClient =  await ConnectionOperations.getClientByConnection(clientsList, connection)
-            let url = BACKEND_SERVER + 'Admin/Station/returnPowerBank/'
-            let reqData = {
-                "StationId": currentClient.boxId,
-                "clientId": "1",
-                "powerBankId": "8"
-            }
-            let rs = await HttpRequestHandler.POST(url, reqData)
-            if (rs.finalResult == true) {
+            if(currentClient != false){
+                let url = BACKEND_SERVER + 'Admin/Station/returnPowerBank/'
+                let reqData = {
+                    "StationId": currentClient.boxId,
+                    "clientId": "1",
+                    "powerBankId": "8"
+                }
+                let rs = await HttpRequestHandler.POST(url, reqData)
+                if (rs.finalResult == true) {
+                    ConsoleMsgs.success("Transaction recorded")
+                }else {
+                    ConsoleMsgs.error(JSON.stringify(rs))
 
+                }
             }else {
-                ConsoleMsgs.error(JSON.stringify(rs))
-
+                ConsoleMsgs.error("could not send answer to station")
             }
+
         } else {
             ConsoleMsgs.error("could not send answer to station")
         }
