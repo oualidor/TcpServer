@@ -31,10 +31,16 @@ const HttpRequestHandler = {
     },
 
 
-    async  POST(URL, DATA, token) {
-
+    async  POST(URL, DATA) {
         try{
-            const response  = await axios.post( URL ,DATA)
+            const response  = await axios(
+                {
+                    url: URL,
+                    method: "post",
+                    responseType: 'json',
+                    headers: {'Content-Type': 'application/json', authorization: 'Bearer ' + adminToken},
+                    data: DATA,
+                })
             const data = await response.data;
             return data
         }catch (error){

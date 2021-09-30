@@ -1,6 +1,8 @@
 const {HeartBitAnswer} = require("../Structures/HeartBitAnswer");
 
 const RequestOperations = require("./RequestOperations");
+const {HttpRequestHandler} = require("./HttpRequestHandler");
+const {BACKEND_SERVER} = require("./Config");
 const {CMDs} = require("./CMDs");
 const {ReturnPowerBank} = require("../Structures/ReturnPowerBank");
 const {ConsoleMsgs} = require("./ConsoleMsgs");
@@ -15,12 +17,24 @@ function answerHeartBit (connection){
 
 }
 
-async function answerPowerBankReturn(connection, stationRequest, result) {
+async function answerPowerBankReturn(clientsList, connection, stationRequest, result) {
     try {
         let serverAnswer = await ReturnPowerBank.serverAnswer("01", "fa", "11223344", stationRequest.slot, result)
         if (connection.write(serverAnswer)) {
-
             ConsoleMsgs.success("answer sent to station")
+            let currentStation = ConnectionOperations.getClientByConnection(clientsList, connection)
+            let url = BACKEND_SERVER + 'Admin/Station/returnPowerBank/'
+            let reqData = {
+                "StationId": currentStation.boxId,
+                "clientId": "1",
+                "powerBankId": "8"
+            }
+            let rs = await HttpRequestHandler.POST(url, reqData)
+            if (rs.finalResult == true) {
+
+            }else {
+
+            }
         } else {
             ConsoleMsgs.error("could not send answer to station")
         }
@@ -59,9 +73,8 @@ const RequestEvents = {
                             getRentAnswer(data)
                             break
                         case CMDs.ReturnPowerBank:
-                            console.log(data)
                             let stationRequest = await ReturnPowerBank.stationRequest(data)
-                            answerPowerBankReturn(connection, stationRequest, "00")
+                            answerPowerBankReturn(clientsList, connection, stationRequest, "01")
                             break
                     }
                 } else {
