@@ -28,7 +28,7 @@ const ConnectionOperations = {
             if ((clientsList == undefined) || (clientsList.length == 0)) return false
             for (let i=0; i<clientsList.length; i++){
                 let client = clientsList[i]
-                if(client.boxId == connection) return client
+                if(client.connection == connection) return client
             }
             return false
         }catch (e){
