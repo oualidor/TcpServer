@@ -29,7 +29,6 @@ const ConnectionEvents = {
         connection.on("data", data => {
             try {
                 data = data.toString("hex")
-                client.setBusy(true)
                 let cmd = RequestOperations.CmdExtractor(data)
                 if (cmd != undefined) {
                     if (cmd == CMDs.PowerBankInfo) {
@@ -50,7 +49,6 @@ const ConnectionEvents = {
                 ConsoleMsgs.error(error)
                 res.send({finalResult: false, error: "Request failed due to intern error"})
             }
-
         })
     },
 

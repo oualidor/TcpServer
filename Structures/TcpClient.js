@@ -6,7 +6,8 @@ class TcpClient{
         this.isBusy = true
     }
     setBusy(isBusy){
-     this.isBusy = isBusy
+        console.log("stat changed to " + isBusy)
+        this.isBusy = isBusy
     }
 }
 

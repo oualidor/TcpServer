@@ -18,7 +18,6 @@ const StationRouters  = {
                 client.setBusy(true)
                 let connection  = client.connection
                 if (connection.write(PowerBanksInfoQueries.serverQuery("0007", "01", "8a", "11223344"))) {
-                    ConsoleMsgs.debug("PowerBanksInfoQueries sent ")
                     ConnectionEvents.PowerBankQuery(clientsList, client, res)
                 } else {
                     client.setBusy(false)
