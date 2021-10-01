@@ -84,7 +84,7 @@ class SocketServer extends EventEmitter{
             let url = BACKEND_SERVER + 'Admin/Station/getOneByPublicId/' + currentConnectionBoxId
             let rs = await HttpRequestHandler.GET(url)
             if (rs.finalResult == true) {
-                let newClient = new TcpClient(currentConnectionBoxId, connection, true)
+                let newClient = new TcpClient(currentConnectionBoxId, connection, false)
                 let answer = LoginQueries.serverAnswer("01", "01")
                 try{
                     if(connection.write(answer)){
