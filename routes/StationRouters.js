@@ -54,10 +54,7 @@ const StationRouters  = {
                                             ConsoleMsgs.success("Rent power bank answer caught successfully")
                                             ConsoleMsgs.success("Setting data event to normal after power bank return only")
                                             connection.removeAllListeners("data")
-                                            connection.on("data", data => {
-                                                data = data.toString('hex')
-                                                ConnectionEvents.General(clientsList, connection, data)
-                                            })
+                                            ConnectionEvents.General(clientsList, connection)
                                             res.send({finalResult: true, data: RentPowerBankQueries.StationAnswer(data)})
                                         }catch (e){
                                             res.send({finalResult: false, error: e})
@@ -104,10 +101,7 @@ const StationRouters  = {
                                     ConsoleMsgs.success("Query APN answer caught successfully")
                                     ConsoleMsgs.success("Setting data event to normal after Query APN only")
                                     connection.removeAllListeners("data")
-                                    connection.on("data", data => {
-                                        data = data.toString('hex')
-                                        ConnectionEvents.General(clientsList, connection, data)
-                                    })
+                                    ConnectionEvents.General(clientsList, connection)
                                     console.log(data)
                                     res.send({finalResult: true, data: QueryAPNQueries.stationAnswer(data)})
                                 }catch (e){

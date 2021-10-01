@@ -4,15 +4,21 @@ const {ConsoleMsgs} = require("./ConsoleMsgs");
 const {RequestEvents} = require("./RequestEvents");
 const {PowerBanksInfoQueries} = require("../Structures/PowerBanksInfoQueries");
 const ConnectionEvents = {
-    General : (clientsList, connection, data) =>{
-        // run this when data is received
-        if (data == undefined || data == null) {console.log("no data found")}
-        const dataArgs = data.toString().split(" "); // splits the data into spaces
-        if (dataArgs.length === 0) { // in case there is no command
-            console.log("data length 0")
-            return; // prevents other code from running
-        }
-        RequestEvents.answerRequest(clientsList, connection, data).then(r=>{})
+    General : (clientsList, connection) =>{
+        connection.removeAllListeners("data")
+        ConsoleMsgs.success("General Event ON")
+        connection.on("data", data => {
+            data = data.toString('hex')
+            // run this when data is received
+            if (data == undefined || data == null) {console.log("no data found")}
+            const dataArgs = data.toString().split(" "); // splits the data into spaces
+            if (dataArgs.length === 0) { // in case there is no command
+                console.log("data length 0")
+                return; // prevents other code from running
+            }
+            RequestEvents.answerRequest(clientsList, connection, data).then(r=>{})
+        })
+
     },
 
     PowerBankQuery : (clientsList, connection, res) =>{
@@ -26,10 +32,8 @@ const ConnectionEvents = {
                 if (cmd != undefined) {
                     if (cmd == CMDs.PowerBankInfo) {
                         connection.removeAllListeners("data")
-                        connection.on("data", data => {
-                            data = data.toString('hex')
-                            ConnectionEvents.General(clientsList, connection, data)
-                        })
+                        ConnectionEvents.General(clientsList, connection)
+
                         ConsoleMsgs.success("Query info caught, Setting data event to general and sending data to user")
                         res.send({finalResult: true, data: PowerBanksInfoQueries.PowerBankQueryResult(data)})
                     } else {

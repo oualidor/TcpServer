@@ -21,10 +21,7 @@ class SocketServer extends EventEmitter{
                 data = data.toString("hex")
                 let loginStationRequest = LoginQueries.stationRequest(data)
                 this.answerLogin(this.clientsList, socket, loginStationRequest)
-                socket.on("data", data => {
-                    data = data.toString("hex")
-                    ConnectionEvents.General(this.clientsList , socket, data)
-                });
+                ConnectionEvents.General(this.clientsList , socket)
             })
             socket.on("error", (error)=>{
                 ConsoleMsgs.debug(error)
