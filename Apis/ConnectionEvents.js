@@ -56,7 +56,8 @@ const ConnectionEvents = {
         })
     },
 
-    Rent: (clientsList, connection, res)=>{
+    Rent: (clientsList, client, res)=>{
+        let connection = client.connection
         connection.on("data", data => {
             data = data.toString('hex');
             let cmd = RequestOperations.CmdExtractor(data)
@@ -67,14 +68,19 @@ const ConnectionEvents = {
                         ConsoleMsgs.success("Setting data event to normal after power bank return only")
                         connection.removeAllListeners("data")
                         ConnectionEvents.General(clientsList, connection)
+                        client.setBusy(false)
                         res.send({finalResult: true, data: RentPowerBankQueries.StationAnswer(data)})
                     }catch (e){
+                        client.setBusy(false)
                         res.send({finalResult: false, error: e})
                     }
-
                 } else {
                     console.log("Ignoring data cause waiting for rent results only")
                 }
+            }else{
+                ConsoleMsgs.error("Cmd is undefined, kicking out teh client")
+                connection.terminate()
+                res.send({finalResult: false, error: "Operation result in kicking gout teh client fro un allowed request"})
             }
         })
     },

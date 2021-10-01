@@ -22,6 +22,7 @@ const StationRouters  = {
                     ConsoleMsgs.debug("PowerBanksInfoQueries sent ")
                     ConnectionEvents.PowerBankQuery(clientsList, client, res)
                 } else {
+                    client.setBusy(false)
                     res.send({finalResult: false, error: "Failed to send request to station"})
                 }
             }catch (e){
@@ -41,12 +42,14 @@ const StationRouters  = {
                 let requestAddress = BACKEND_SERVER+'Admin/Station/getRealTimeInfo/'+boxId
                 const rs = await HttpRequestHandler.GET(requestAddress)
                 if (rs.finalResult == true) {
-                    let connection = client.connection
                     if (rs.data.powerBanksList.length > 0) {
+                        client.setBusy(true)
+                        let connection = client.connection
                         if (connection.write(RentPowerBankQueries.serverRequest("0008", "01", "8a", "11223344", rs.data.powerBanksList[0].slot))) {
                             ConsoleMsgs.success("Power Banks request sent to user and compatible listener is on")
-                            ConnectionEvents.Rent(clientsList, connection, res)
+                            ConnectionEvents.Rent(clientsList, client, res)
                         } else {
+                            client.setBusy(false)
                             res.send({finalResult: false, error: "could not send rent request"})
                         }
                     } else {
