@@ -29,7 +29,7 @@ const ConnectionEvents = {
         connection.on("data", data => {
             try {
                 data = data.toString("hex")
-                console.log(data)
+                client.setBusy(true)
                 let cmd = RequestOperations.CmdExtractor(data)
                 if (cmd != undefined) {
                     if (cmd == CMDs.PowerBankInfo) {

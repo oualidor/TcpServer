@@ -14,7 +14,6 @@ const StationRouters  = {
         if(client == false){
             res.send({finalResult: false, error: "Station not logged or busy"})
         }else {
-
             try{
                 client.setBusy(true)
                 let connection  = client.connection
@@ -26,7 +25,7 @@ const StationRouters  = {
                     res.send({finalResult: false, error: "Failed to send request to station"})
                 }
             }catch (e){
-                console.log(e)
+                client.setBusy(false)
                 res.send({finalResult: false, error: "Error while sending request to the station"})
             }
         }
@@ -69,7 +68,6 @@ const StationRouters  = {
         let { boxId, APNIndex } = req.params
         let client =  ConnectionOperations.getClientByBoxId(clientsList, boxId)
         try {
-
             if (client == false) {
                 res.send({finalResult: false, error: "Station not logged in"})
             } else {
@@ -87,7 +85,6 @@ const StationRouters  = {
             res.send({finaResult: false, error: "could not query station for info"})
         }
     }
-
 }
 
 

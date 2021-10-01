@@ -20,7 +20,6 @@ class ExpressServer extends EventEmitter {
     this.app.use(express.urlencoded({ extended: false }));
     this.app.use(cookieParser());
 
-
     this.app.once('error', function(err) {
       if (err.code === 'EADDRINUSE') {
         delete this
