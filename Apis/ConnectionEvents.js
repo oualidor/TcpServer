@@ -67,8 +67,9 @@ const ConnectionEvents = {
                         ConsoleMsgs.success("Rent power bank answer caught successfully")
                         ConsoleMsgs.success("Setting data event to normal after power bank return only")
                         connection.removeAllListeners("data")
-                        ConnectionEvents.General(clientsList, connection)
                         client.setBusy(false)
+                        ConnectionEvents.General(clientsList, connection)
+
                         res.send({finalResult: true, data: RentPowerBankQueries.StationAnswer(data)})
                     }catch (e){
                         client.setBusy(false)
@@ -85,7 +86,8 @@ const ConnectionEvents = {
         })
     },
 
-    QueryAPN: (clientsList, connection, res)=>{
+    QueryAPN: (clientsList, client, res)=>{
+        let connection = client.connection
         connection.on("data", data => {
             data = data.toString('hex');
             let cmd = RequestOperations.CmdExtractor(data)
@@ -95,10 +97,11 @@ const ConnectionEvents = {
                         ConsoleMsgs.success("Query APN answer caught successfully")
                         ConsoleMsgs.success("Setting data event to normal after Query APN only")
                         connection.removeAllListeners("data")
+                        client.setBusy(false)
                         ConnectionEvents.General(clientsList, connection)
-                        console.log(data)
                         res.send({finalResult: true, data: QueryAPNQueries.stationAnswer(data)})
                     }catch (e){
+                        client.setBusy(false)
                         res.send({finalResult: false, error: "intern error"})
                     }
                 } else {

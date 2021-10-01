@@ -67,21 +67,25 @@ const StationRouters  = {
     },
 
     QueryAPN :  (req, res, clientsList) => {
+        let { boxId, APNIndex } = req.params
+        let client =  ConnectionOperations.getClientByBoxId(clientsList, boxId)
         try {
-            let { boxId, APNIndex } = req.params
-            let client =  ConnectionOperations.getClientByBoxId(clientsList, boxId)
+
             if (client == false) {
                 res.send({finalResult: false, error: "Station not logged in"})
             } else {
+                client.setBusy(true)
                 let connection = client.connection
                 if (connection.write(QueryAPNQueries.serverRequest("8a", APNIndex))){
                     ConsoleMsgs.success("Query APN request sent to user and compatible listener is on")
-                    ConnectionEvents.QueryAPN(clientsList, connection, res)
+                    ConnectionEvents.QueryAPN(clientsList, client, res)
                 } else {
+                    client.setBusy(false)
                     res.send({finaResult: false, error: "could not send rent request"})
                 }
             }
         } catch (error) {
+            client.setBusy(false)
             res.send({finaResult: false, error: "could not query station for info"})
         }
     }
