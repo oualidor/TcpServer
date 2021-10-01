@@ -89,7 +89,6 @@ class SocketServer extends EventEmitter{
                 try{
                     if(connection.write(answer)){
                         this.addClient(newClient)
-                        ConnectionOperations.getClientByConnection(connection).
                         ConsoleMsgs.success("Client logged in successfully")
                     }else {
                         ConsoleMsgs.error("Could not send login answer to Station")
