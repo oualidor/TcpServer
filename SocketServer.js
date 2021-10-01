@@ -18,8 +18,6 @@ class SocketServer extends EventEmitter{
         this.clientsList = []
         let server = net.createServer([{allowHalfOpen: false, pauseOnConnect: false}]);
         server.on("connection", socket => {
-            socket.on()
-            socket.isBusy
             ConsoleMsgs.debug("Client handshake")
             socket.once("data", (data)=>{
                 data = data.toString("hex")
