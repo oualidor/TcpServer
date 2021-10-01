@@ -1,4 +1,6 @@
 const RequestOperations = require("./RequestOperations");
+const {QueryAPNQueries} = require("../Structures/QueryAPNQueries");
+const {RentPowerBankQueries} = require("../Structures/RentPowerBankQueries");
 const {CMDs} = require("./CMDs");
 const {ConsoleMsgs} = require("./ConsoleMsgs");
 const {RequestEvents} = require("./RequestEvents");
@@ -49,6 +51,52 @@ const ConnectionEvents = {
                 res.send({finalResult: false, error: "Request failed due to intern error"})
             }
 
+        })
+    },
+
+    Rent: (clientsList, connection, res)=>{
+        connection.on("data", data => {
+            data = data.toString('hex');
+            let cmd = RequestOperations.CmdExtractor(data)
+            if (cmd != undefined) {
+                if (cmd == CMDs.RentPowerBank) {
+                    try{
+                        ConsoleMsgs.success("Rent power bank answer caught successfully")
+                        ConsoleMsgs.success("Setting data event to normal after power bank return only")
+                        connection.removeAllListeners("data")
+                        ConnectionEvents.General(clientsList, connection)
+                        res.send({finalResult: true, data: RentPowerBankQueries.StationAnswer(data)})
+                    }catch (e){
+                        res.send({finalResult: false, error: e})
+                    }
+
+                } else {
+                    console.log("Ignoring data cause waiting for rent results only")
+                }
+            }
+        })
+    },
+
+    QueryAPN: (clientsList, connection, res)=>{
+        connection.on("data", data => {
+            data = data.toString('hex');
+            let cmd = RequestOperations.CmdExtractor(data)
+            if (cmd != undefined) {
+                if (cmd == CMDs.QueryAPN) {
+                    try{
+                        ConsoleMsgs.success("Query APN answer caught successfully")
+                        ConsoleMsgs.success("Setting data event to normal after Query APN only")
+                        connection.removeAllListeners("data")
+                        ConnectionEvents.General(clientsList, connection)
+                        console.log(data)
+                        res.send({finalResult: true, data: QueryAPNQueries.stationAnswer(data)})
+                    }catch (e){
+                        res.send({finalResult: false, error: "intern error"})
+                    }
+                } else {
+                    console.log("Ignoring data cause waiting for Query APN results only")
+                }
+            }
         })
     }
 }

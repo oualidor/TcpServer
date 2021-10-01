@@ -1,6 +1,4 @@
-const RequestOperations = require("../Apis/RequestOperations");
 const {QueryAPNQueries} = require("../Structures/QueryAPNQueries");
-const {CMDs} = require("../Apis/CMDs");
 const {RentPowerBankQueries} = require("../Structures/RentPowerBankQueries");
 const {ConsoleMsgs} = require("../Apis/ConsoleMsgs");
 const {ConnectionEvents} = require("../Apis/ConnectionEvents");
@@ -45,26 +43,7 @@ const StationRouters  = {
                     if (rs.data.powerBanksList.length > 0) {
                         if (connection.write(RentPowerBankQueries.serverRequest("0008", "01", "8a", "11223344", rs.data.powerBanksList[0].slot))) {
                             ConsoleMsgs.success("Power Banks request sent to user and compatible listener is on")
-                            connection.on("data", data => {
-                                data = data.toString('hex');
-                                let cmd = RequestOperations.CmdExtractor(data)
-                                if (cmd != undefined) {
-                                    if (cmd == CMDs.RentPowerBank) {
-                                        try{
-                                            ConsoleMsgs.success("Rent power bank answer caught successfully")
-                                            ConsoleMsgs.success("Setting data event to normal after power bank return only")
-                                            connection.removeAllListeners("data")
-                                            ConnectionEvents.General(clientsList, connection)
-                                            res.send({finalResult: true, data: RentPowerBankQueries.StationAnswer(data)})
-                                        }catch (e){
-                                            res.send({finalResult: false, error: e})
-                                        }
-
-                                    } else {
-                                        console.log("Ignoring data cause waiting for rent results only")
-                                    }
-                                }
-                            })
+                            ConnectionEvents.Rent(clientsList, connection, res)
                         } else {
                             res.send({finalResult: false, error: "could not send rent request"})
                         }
@@ -92,26 +71,7 @@ const StationRouters  = {
                 let connection = client.connection
                 if (connection.write(QueryAPNQueries.serverRequest("8a", APNIndex))){
                     ConsoleMsgs.success("Query APN request sent to user and compatible listener is on")
-                    connection.on("data", data => {
-                        data = data.toString('hex');
-                        let cmd = RequestOperations.CmdExtractor(data)
-                        if (cmd != undefined) {
-                            if (cmd == CMDs.QueryAPN) {
-                                try{
-                                    ConsoleMsgs.success("Query APN answer caught successfully")
-                                    ConsoleMsgs.success("Setting data event to normal after Query APN only")
-                                    connection.removeAllListeners("data")
-                                    ConnectionEvents.General(clientsList, connection)
-                                    console.log(data)
-                                    res.send({finalResult: true, data: QueryAPNQueries.stationAnswer(data)})
-                                }catch (e){
-                                    res.send({finalResult: false, error: "intern error"})
-                                }
-                            } else {
-                                console.log("Ignoring data cause waiting for Query APN results only")
-                            }
-                        }
-                    })
+                    ConnectionEvents.QueryAPN(clientsList, connection, res)
                 } else {
                     res.send({finaResult: false, error: "could not send rent request"})
                 }
@@ -121,7 +81,7 @@ const StationRouters  = {
         }
     }
 
-    }
+}
 
 
 
