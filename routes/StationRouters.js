@@ -46,7 +46,6 @@ const StationRouters  = {
                         client.setBusy(true)
                         let connection = client.connection
                         if (connection.write(RentPowerBankQueries.serverRequest("0008", "01", "8a", "11223344", rs.data.powerBanksList[0].slot))) {
-                            ConsoleMsgs.success("Power Banks request sent to user and compatible listener is on")
                             ConnectionEvents.Rent(clientsList, client, res)
                         } else {
                             client.setBusy(false)
@@ -77,7 +76,6 @@ const StationRouters  = {
                 client.setBusy(true)
                 let connection = client.connection
                 if (connection.write(QueryAPNQueries.serverRequest("8a", APNIndex))){
-                    ConsoleMsgs.success("Query APN request sent to user and compatible listener is on")
                     ConnectionEvents.QueryAPN(clientsList, client, res)
                 } else {
                     client.setBusy(false)

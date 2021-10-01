@@ -26,7 +26,6 @@ const ConnectionEvents = {
     PowerBankQuery : (clientsList, client, res) =>{
         let connection = client.connection
         connection.removeAllListeners("data")
-        ConsoleMsgs.success("Setting data event to wait for query info only")
         connection.on("data", data => {
             try {
                 data = data.toString("hex")
@@ -36,7 +35,6 @@ const ConnectionEvents = {
                     if (cmd == CMDs.PowerBankInfo) {
                         connection.removeAllListeners("data")
                         ConnectionEvents.General(clientsList, connection)
-                        ConsoleMsgs.success("Query info caught, Setting data event to general and sending data to user")
                         client.setBusy(false)
                         res.send({finalResult: true, data: PowerBanksInfoQueries.PowerBankQueryResult(data)})
                     } else {
@@ -64,8 +62,6 @@ const ConnectionEvents = {
             if (cmd != undefined) {
                 if (cmd == CMDs.RentPowerBank) {
                     try{
-                        ConsoleMsgs.success("Rent power bank answer caught successfully")
-                        ConsoleMsgs.success("Setting data event to normal after power bank return only")
                         connection.removeAllListeners("data")
                         client.setBusy(false)
                         ConnectionEvents.General(clientsList, connection)
@@ -94,8 +90,6 @@ const ConnectionEvents = {
             if (cmd != undefined) {
                 if (cmd == CMDs.QueryAPN) {
                     try{
-                        ConsoleMsgs.success("Query APN answer caught successfully")
-                        ConsoleMsgs.success("Setting data event to normal after Query APN only")
                         connection.removeAllListeners("data")
                         client.setBusy(false)
                         ConnectionEvents.General(clientsList, connection)

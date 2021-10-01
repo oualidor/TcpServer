@@ -21,7 +21,6 @@ async function answerPowerBankReturn(clientsList, connection, stationRequest, re
     try {
         let serverAnswer = await ReturnPowerBank.serverAnswer("01", "fa", "11223344", stationRequest.slot, result)
         if (connection.write(serverAnswer)) {
-            ConsoleMsgs.success("answer sent to station")
             let currentClient =  await ConnectionOperations.getClientByConnection(clientsList, connection)
             if(currentClient != false){
                 let url = BACKEND_SERVER + 'Admin/Station/returnPowerBank/'
@@ -32,7 +31,6 @@ async function answerPowerBankReturn(clientsList, connection, stationRequest, re
                 }
                 let rs = await HttpRequestHandler.POST(url, reqData)
                 if (rs.finalResult == true) {
-                    ConsoleMsgs.success("Transaction recorded")
                 }else {
                     ConsoleMsgs.error(JSON.stringify(rs))
                 }
