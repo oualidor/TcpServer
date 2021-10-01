@@ -23,8 +23,8 @@ const ConnectionEvents = {
 
     },
 
-    PowerBankQuery : (clientsList, connection, res) =>{
-        if(connection)
+    PowerBankQuery : (clientsList, client, res) =>{
+        let connection = client.connection
         connection.removeAllListeners("data")
         ConsoleMsgs.success("Setting data event to wait for query info only")
         connection.on("data", data => {
@@ -36,8 +36,8 @@ const ConnectionEvents = {
                     if (cmd == CMDs.PowerBankInfo) {
                         connection.removeAllListeners("data")
                         ConnectionEvents.General(clientsList, connection)
-
                         ConsoleMsgs.success("Query info caught, Setting data event to general and sending data to user")
+                        client.setBusy(false)
                         res.send({finalResult: true, data: PowerBanksInfoQueries.PowerBankQueryResult(data)})
                     } else {
                         console.log("ignoring data cause waiting for query info only")
@@ -48,6 +48,7 @@ const ConnectionEvents = {
                     res.send({finalResult: false, error: "Operation result in kicking gout teh client fro un allowed request"})
                 }
             }catch (error){
+                client.setBusy(false)
                 ConsoleMsgs.error(error)
                 res.send({finalResult: false, error: "Request failed due to intern error"})
             }

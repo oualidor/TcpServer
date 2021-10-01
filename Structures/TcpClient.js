@@ -5,7 +5,7 @@ class TcpClient{
         this.connection = connection
         this.isBusy = true
     }
-    setStat(isBusy){
+    setBusy(isBusy){
      this.isBusy = isBusy
     }
 }

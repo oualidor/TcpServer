@@ -88,7 +88,7 @@ class SocketServer extends EventEmitter{
                 let answer = LoginQueries.serverAnswer("01", "01")
                 try{
                     if(connection.write(answer)){
-                        newClient.setStat(false)
+                        newClient.setBusy(false)
                         this.addClient(newClient)
                         ConsoleMsgs.success("Client logged in successfully")
                     }else {
