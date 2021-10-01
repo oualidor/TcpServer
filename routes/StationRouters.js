@@ -12,7 +12,7 @@ const StationRouters  = {
         let {boxId} = req.params
         let client = await ConnectionOperations.getClientByBoxId(clientsList, boxId)
         if(client == false){
-            res.send({finalResult: false, error: "Station not logged in"})
+            res.send({finalResult: false, error: "Station not logged or busy"})
         }else {
             let connection  = client.connection
             try{

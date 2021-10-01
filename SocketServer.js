@@ -1,5 +1,7 @@
 const net = require("net");
 const EventEmitter = require('events')
+const TcpClient = require("./Structures/TcpClient");
+const {ConnectionOperations} = require("./Apis/ConnectionOperations");
 const {LoginQueries} = require("./Structures/LoginQueries");
 const {LoginAnswer} = require("./Structures/LoginQueries");
 const {HttpRequestHandler} = require("./Apis/HttpRequestHandler");
@@ -16,6 +18,8 @@ class SocketServer extends EventEmitter{
         this.clientsList = []
         let server = net.createServer([{allowHalfOpen: false, pauseOnConnect: false}]);
         server.on("connection", socket => {
+            socket.on()
+            socket.isBusy
             ConsoleMsgs.debug("Client handshake")
             socket.once("data", (data)=>{
                 data = data.toString("hex")
@@ -82,10 +86,12 @@ class SocketServer extends EventEmitter{
             let url = BACKEND_SERVER + 'Admin/Station/getOneByPublicId/' + currentConnectionBoxId
             let rs = await HttpRequestHandler.GET(url)
             if (rs.finalResult == true) {
-                this.addClient({boxId: currentConnectionBoxId, connection: connection})
+                let newClient = new TcpClient(currentConnectionBoxId, connection, true)
                 let answer = LoginQueries.serverAnswer("01", "01")
                 try{
                     if(connection.write(answer)){
+                        this.addClient(newClient)
+                        ConnectionOperations.getClientByConnection(connection).
                         ConsoleMsgs.success("Client logged in successfully")
                     }else {
                         ConsoleMsgs.error("Could not send login answer to Station")

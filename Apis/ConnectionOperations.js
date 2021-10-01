@@ -14,15 +14,16 @@ const ConnectionOperations = {
             if ((clientsList == undefined) || (clientsList.length == 0)) return false
             for (let i=0; i<clientsList.length; i++){
                 let client = clientsList[i]
-                if(client.boxId == boxId) return client
+                if(client.boxId == boxId ){
+                    if (client.isBusy) return false
+                    return client
+                }
             }
             return false
         }catch (e){
             return false
         }
     },
-
-
     getClientByConnection :  (clientsList, connection)=> {
         try{
             if ((clientsList == undefined) || (clientsList.length == 0)) return false
@@ -35,8 +36,6 @@ const ConnectionOperations = {
             return false
         }
     }
-
-
 
 }
 

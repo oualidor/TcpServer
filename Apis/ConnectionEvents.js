@@ -24,6 +24,7 @@ const ConnectionEvents = {
     },
 
     PowerBankQuery : (clientsList, connection, res) =>{
+        if(connection)
         connection.removeAllListeners("data")
         ConsoleMsgs.success("Setting data event to wait for query info only")
         connection.on("data", data => {
