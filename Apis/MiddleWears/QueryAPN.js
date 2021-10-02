@@ -20,6 +20,5 @@ const QueryAPN = {
         }
     }
 }
-
 module.exports = QueryAPN
 
