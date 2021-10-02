@@ -3,6 +3,7 @@ const EventEmitter = require('events')
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const yitLogger  = require('./Apis/yitLogger')
+const QueryAPN = require("./Apis/MiddleWears/QueryAPN");
 const {EXPRESS_PORT} = require("./Apis/Config");
 const {ConnectionEvents} = require("./Apis/ConnectionEvents");
 const {StationRouters} = require("./routes/StationRouters");
@@ -37,7 +38,7 @@ class ExpressServer extends EventEmitter {
     this.app.get("/HeartBitExpress", (req, res)=>{res.send({finalResult: true, result: "Test work"})})
     this.app.get("/Station/QueryInfo/:boxId", (req, res)=>{ StationRouters.QueryInfo(req, res, this.clientsList)})
     this.app.get("/Station/rent/:boxId", (req, res)=>{StationRouters.rentPowerBank(req, res, this.clientsList)})
-    this.app.get("/Station/QueryAPN/:boxId/:APNIndex", (req, res)=>{StationRouters.QueryAPN(req, res, this.clientsList)})
+    this.app.get("/Station/QueryAPN/:boxId/:APNIndex", QueryAPN.dataValidator, (req, res)=>{StationRouters.QueryAPN(req, res, this.clientsList)})
   }
 
   addClient(client){
