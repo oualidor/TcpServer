@@ -4,12 +4,12 @@ const QueryAPN = {
         let valid = true
         let  error = ""
         let acceptedIndexes = ["00", "01", "02", "03", "04"]
-        let {stationId, index} = req.params
-        if (acceptedIndexes.includes(index) == false){
+        let {boxId, APNIndex} = req.params
+        if (acceptedIndexes.includes(APNIndex) == false){
             valid = false
             error = error + "/ wrong index"
         }
-        if(stationId == null || stationId == undefined || stationId.length == 0 || stationId.length == undefined ){
+        if(boxId == null || boxId == undefined || boxId.length == 0 || boxId.length == undefined ){
             valid =false
             error = error + "/ wrong station ID"
         }
