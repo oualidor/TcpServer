@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node App.js",
-    "dev": "clear && nodemon  App.js"
+    "dev": "clear && npx kill-port 3000 && nodemon  App.js"
   },
   "dependencies": {
     "axios": "^0.21.4",
