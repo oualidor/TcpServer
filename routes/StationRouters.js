@@ -15,6 +15,7 @@ const StationRouters  = {
             res.send({finalResult: false, error: "Station not logged or busy"})
         }else {
             try{
+                ConsoleMsgs.success("Query info found Client found free")
                 await client.setBusy(true)
                 let connection  = client.connection
                 if (connection.write(PowerBanksInfoQueries.serverQuery("0007", "01", "8a", "11223344"))) {
@@ -70,6 +71,8 @@ const StationRouters  = {
             if (client == false) {
                 res.send({finalResult: false, error: "Station not logged in or busy"})
             } else {
+                ConsoleMsgs.success("QueryAPN found Client found free")
+
                 await client.setBusy(true)
                 let connection = client.connection
                 if (connection.write(QueryAPNQueries.serverRequest("8a", APNIndex))) {
