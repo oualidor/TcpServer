@@ -74,7 +74,6 @@ const StationRouters  = {
                 res.send({finalResult: false, error: "Station not logged in or busy"})
             } else {
                 ConsoleMsgs.success("QueryAPN found Client found free")
-
                 await client.setBusy(true)
                 let connection = client.connection
                 if (connection.write(QueryAPNQueries.serverRequest("8a", APNIndex))) {

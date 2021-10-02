@@ -45,21 +45,13 @@ async function answerPowerBankReturn(clientsList, connection, stationRequest, re
     }
 }
 
-async function getRentAnswer(data) {
-    console.log(data)
-}
 
-async function getPBQueryAnswer(data) {
-    console.log("power bank info coming")
-    console.log(data)
-}
+
 
 const RequestEvents = {
     answerRequest : async (clientsList, connection, data) => {
-        let buf
         let cmd = RequestOperations.CmdExtractor(data)
         if (cmd != undefined) {
-            console.log(cmd + " request entered, trying to answer")
             if (CmdExtractor(data) === CMDs.login) {
                 ConsoleMsgs.error("Refusing login cause of forbidden time")
             } else {
@@ -68,15 +60,9 @@ const RequestEvents = {
                         case CMDs.heartBit:
                             answerHeartBit(connection)
                             break
-                        case CMDs.PowerBankInfo:
-                            getPBQueryAnswer(data)
-                            break
-                        case CMDs.RentPowerBank:
-                            getRentAnswer(data)
-                            break
                         case CMDs.ReturnPowerBank:
                             let stationRequest = await ReturnPowerBank.stationRequest(data)
-                            answerPowerBankReturn(clientsList, connection, stationRequest, "01")
+                            await answerPowerBankReturn(clientsList, connection, stationRequest, "01")
                             break
                     }
                 } else {
