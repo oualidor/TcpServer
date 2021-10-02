@@ -63,16 +63,16 @@ const StationRouters  = {
         }
     },
 
-    QueryAPN :  (req, res, clientsList) => {
-        let { boxId, APNIndex } = req.params
-        let client =  ConnectionOperations.getClientByBoxId(clientsList, boxId)
+    QueryAPN :  async (req, res, clientsList) => {
+        let {boxId, APNIndex} = req.params
+        let client = ConnectionOperations.getClientByBoxId(clientsList, boxId)
         try {
             if (client == false) {
-                res.send({finalResult: false, error: "Station not logged in"})
+                res.send({finalResult: false, error: "Station not logged in or busy"})
             } else {
-                client.setBusy(true)
+                await client.setBusy(true)
                 let connection = client.connection
-                if (connection.write(QueryAPNQueries.serverRequest("8a", APNIndex))){
+                if (connection.write(QueryAPNQueries.serverRequest("8a", APNIndex))) {
                     ConnectionEvents.QueryAPN(clientsList, client, res)
                 } else {
                     client.setBusy(false)
