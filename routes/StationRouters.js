@@ -15,10 +15,10 @@ const StationRouters  = {
             res.send({finalResult: false, error: "Station not logged or busy"})
         }else {
             try{
-                client.setBusy(true)
+                await client.setBusy(true)
                 let connection  = client.connection
                 if (connection.write(PowerBanksInfoQueries.serverQuery("0007", "01", "8a", "11223344"))) {
-                    ConnectionEvents.PowerBankQuery(clientsList, client, res)
+                    ConnectionEvents.QueryInfo(clientsList, client, res)
                 } else {
                     client.setBusy(false)
                     res.send({finalResult: false, error: "Failed to send request to station"})

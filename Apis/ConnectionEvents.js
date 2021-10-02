@@ -23,19 +23,18 @@ const ConnectionEvents = {
 
     },
 
-    PowerBankQuery : (clientsList, client, res) =>{
+    QueryInfo : (clientsList, client, res) =>{
         let connection = client.connection
         connection.removeAllListeners("data")
-        connection.on("data", data => {
+        connection.on("data", async data => {
             try {
                 data = data.toString("hex")
                 let cmd = RequestOperations.CmdExtractor(data)
                 if (cmd != undefined) {
                     if (cmd == CMDs.PowerBankInfo) {
-                        connection.removeAllListeners("data")
-                        ConnectionEvents.General(clientsList, connection)
-                        client.setBusy(false)
                         res.send({finalResult: true, data: PowerBanksInfoQueries.PowerBankQueryResult(data)})
+                        await client.setBusy(false)
+                        ConnectionEvents.General(clientsList, connection)
                     } else {
                         console.log("ignoring data cause waiting for query info only")
                     }
@@ -45,7 +44,7 @@ const ConnectionEvents = {
                     res.send({finalResult: false, error: "Operation result in kicking gout teh client fro un allowed request"})
                 }
             }catch (error){
-                client.setBusy(false)
+                await client.setBusy(false)
                 ConsoleMsgs.error(error)
                 res.send({finalResult: false, error: "Request failed due to intern error"})
             }
