@@ -12,6 +12,7 @@ const StationRouters  = {
         let {boxId} = req.params
         let client = await ConnectionOperations.getClientByBoxId(clientsList, boxId)
         if(client == false){
+            ConsoleMsgs.error("Query info found Client busy")
             res.send({finalResult: false, error: "Station not logged or busy"})
         }else {
             try{
@@ -69,6 +70,7 @@ const StationRouters  = {
         let client = ConnectionOperations.getClientByBoxId(clientsList, boxId)
         try {
             if (client == false) {
+                ConsoleMsgs.error("QueryAPN found Client busy")
                 res.send({finalResult: false, error: "Station not logged in or busy"})
             } else {
                 ConsoleMsgs.success("QueryAPN found Client found free")
