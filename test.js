@@ -1,10 +1,6 @@
-const TcpClient = require("./Structures/TcpClient");
-let list = []
-list.push(new TcpClient(5))
-function tt(list){
-    return list[0]
-}
-let client = tt(list)
-client.setStat(true)
 
-console.log(list)
+
+//524c33480b100845
+//524c33483042313030383435
+stringToHex("RL3H0B100845")
+console.log(Buffer.from("RL3H0B100845", "utf8"))
