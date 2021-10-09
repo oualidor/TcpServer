@@ -101,7 +101,7 @@ const StationRouters  = {
                 client.setBusy(true)
                 let connection = client.connection
                 if(connection.write(SetVoiceQueries.serverRequest(level))) {
-                    ConnectionEvents.Rent(clientsList, client, res)
+                    ConnectionEvents.ServerFirst(clientsList, client, res)
                 }
                 else {
                     client.setBusy(false)
