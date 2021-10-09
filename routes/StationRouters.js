@@ -1,3 +1,4 @@
+const {SetVoiceQueries} = require("../Structures/SetVoiceQueries");
 const {QueryAPNQueries} = require("../Structures/QueryAPNQueries");
 const {RentPowerBankQueries} = require("../Structures/RentPowerBankQueries");
 const {ConsoleMsgs} = require("../Apis/ConsoleMsgs");
@@ -87,7 +88,30 @@ const StationRouters  = {
             client.setBusy(false)
             res.send({finaResult: false, error: "could not query station for info"})
         }
-    }
+    },
+
+    SetVoice : async (req, res, clientsList) => {
+        try {
+            let { boxId, level } = req.params
+            level = parseInt(level)
+            let client = await ConnectionOperations.getClientByBoxId(clientsList, boxId)
+            if (client == false) {
+                res.send({finalResult: false, error: "Station not logged in"})
+            } else {
+                client.setBusy(true)
+                let connection = client.connection
+                if(connection.write(SetVoiceQueries.serverRequest(level))) {
+                    ConnectionEvents.Rent(clientsList, client, res)
+                }
+                else {
+                    client.setBusy(false)
+                    res.send({finalResult: false, error: "could not send rent request"})
+                }
+            }
+        } catch (error) {
+            res.send({finaResult: false, error: "could not query station for info"})
+        }
+    },
 }
 
 

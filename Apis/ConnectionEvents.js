@@ -1,4 +1,5 @@
 const RequestOperations = require("./RequestOperations");
+const {SetVoiceQueries} = require("../Structures/SetVoiceQueries");
 const {QueryAPNQueries} = require("../Structures/QueryAPNQueries");
 const {RentPowerBankQueries} = require("../Structures/RentPowerBankQueries");
 const {CMDs} = require("./CMDs");
@@ -97,6 +98,45 @@ const ConnectionEvents = {
                     }
                 } else {
                     console.log("Ignoring data cause waiting for Query APN results only")
+                }
+            }else{
+                ConsoleMsgs.error("Cmd is undefined, kicking out teh client")
+                connection.terminate()
+                res.send({finalResult: false, error: "Operation result in kicking gout teh client fro un allowed request"})
+            }
+        })
+    },
+
+    ServerFirst: (clientsList, client, res)=>{
+        let connection = client.connection
+        connection.removeAllListeners("data")
+        connection.on("data", data => {
+            data = data.toString('hex');
+            let cmd = RequestOperations.CmdExtractor(data)
+            if (cmd != undefined) {
+                switch (cmd){
+                    case CMDs.PowerBankInfo:
+
+                        break;
+                    case CMDs.RentPowerBank:
+
+                        break;
+                    case CMDs.QueryAPN:
+
+                        break;
+                    case CMDs.SetVoice:
+                        try{
+                            res.send({finalResult: true, data: SetVoiceQueries.stationAnswer(data)})
+                            client.setBusy(false)
+                            ConnectionEvents.General(clientsList, connection)
+                        }catch (e){
+                            client.setBusy(false)
+                            res.send({finalResult: false, error: "intern error"})
+                            ConnectionEvents.General(clientsList, connection)
+                        }
+                        break;
+                    default:
+                        console.log("Ignoring data cause waiting for Query APN results only")
                 }
             }else{
                 ConsoleMsgs.error("Cmd is undefined, kicking out teh client")
