@@ -26,7 +26,7 @@ const SetServerQueries = {
         let result = CMDs.setServerAddress+ TCP_VERSION+ CheckSum + TCP_SESSIONS_TOKEN+addressLen+ address + portLen+ port+ heartBit
         let PackLen = dexToPackLen(result.length)
         result = PackLen+result;
-        return result;
+        return Buffer.from(result, "hex");
     },
 
     stationAnswer : (data) => {

@@ -23,19 +23,13 @@ const StationRouters  = {
                 await client.setBusy(true)
                 let connection = client.connection
                 let data = SetServerQueries.serverRequest(address, port, heartBit)
-                console.log(data)
-                client.setBusy(false)
-                res.send({finalResult: true, data: "done"})
-
-                /*
-                if(connection.write(SetServerQueries.serverRequest(address, port, heartBit))) {
+                if(connection.write(data)){
                     ConnectionEvents.ServerFirst(clientsList, client, res)
                 }
                 else {
                     client.setBusy(false)
                     res.send({finalResult: false, error: "could not send rent request"})
                 }
-                */
             }
         } catch (error) {
             console.log(error)
