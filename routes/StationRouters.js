@@ -20,7 +20,9 @@ const StationRouters  = {
             } else {
                 await client.setBusy(true)
                 let connection = client.connection
-                res.send({finaResult: true, data: SetServerQueries.serverRequest(address, port, heartBit)})
+                let data = SetServerQueries.serverRequest(address, port, heartBit)
+                console.log(data)
+                res.send({finaResult: true, data: data})
                 client.setBusy(false)
                 /*
                 if(connection.write(SetServerQueries.serverRequest(address, port, heartBit))) {
