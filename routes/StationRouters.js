@@ -20,7 +20,6 @@ const StationRouters  = {
             } else {
                 await client.setBusy(true)
                 let connection = client.connection
-                SetServerQueries.serverRequest(address, port, heartBit)
                 res.send({finaResult: true, data: SetServerQueries.serverRequest(address, port, heartBit)})
                 client.setBusy(false)
                 /*
@@ -34,6 +33,7 @@ const StationRouters  = {
                 */
             }
         } catch (error) {
+            console.log(error)
             res.send({finaResult: false, error: "Request failed"})
         }
     },
