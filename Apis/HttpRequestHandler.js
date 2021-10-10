@@ -46,7 +46,6 @@ const HttpRequestHandler = {
         }catch (error){
             return {finalResult: false, error: error}
         }
-
     }
 }
 
