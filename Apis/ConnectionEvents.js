@@ -1,4 +1,5 @@
 const RequestOperations = require("./RequestOperations");
+const SetServerQueries = require("../Structures/SetServerQueries");
 const {SetVoiceQueries} = require("../Structures/SetVoiceQueries");
 const {QueryAPNQueries} = require("../Structures/QueryAPNQueries");
 const {RentPowerBankQueries} = require("../Structures/RentPowerBankQueries");
@@ -22,34 +23,6 @@ const ConnectionEvents = {
             RequestEvents.answerRequest(clientsList, connection, data).then(r=>{})
         })
 
-    },
-
-    QueryInfo : (clientsList, client, res) =>{
-        let connection = client.connection
-        connection.removeAllListeners("data")
-        connection.on("data", async data => {
-            try {
-                data = data.toString("hex")
-                let cmd = RequestOperations.CmdExtractor(data)
-                if (cmd != undefined) {
-                    if (cmd == CMDs.PowerBankInfo) {
-                        res.send({finalResult: true, data: PowerBanksInfoQueries.PowerBankQueryResult(data)})
-                        await client.setBusy(false)
-                        ConnectionEvents.General(clientsList, connection)
-                    } else {
-                        console.log("ignoring data cause waiting for query info only")
-                    }
-                }else {
-                    ConsoleMsgs.error("Cmd is undefined, kicking out teh client")
-                    connection.terminate()
-                    res.send({finalResult: false, error: "Operation result in kicking gout teh client fro un allowed request"})
-                }
-            }catch (error){
-                await client.setBusy(false)
-                ConsoleMsgs.error(error)
-                res.send({finalResult: false, error: "Request failed due to intern error"})
-            }
-        })
     },
 
     Rent: (clientsList, client, res)=>{
@@ -110,33 +83,41 @@ const ConnectionEvents = {
     ServerFirst: (clientsList, client, res)=>{
         let connection = client.connection
         connection.removeAllListeners("data")
-        connection.on("data", data => {
+        connection.on("data", async data => {
             data = data.toString('hex');
             let cmd = RequestOperations.CmdExtractor(data)
             if (cmd != undefined) {
-                switch (cmd){
-                    case CMDs.PowerBankInfo:
+                try{
+                    switch (cmd){
+                        case CMDs.setServerAddress:
+                            res.send({finalResult: true, data: SetServerQueries.stationAnswer(data)})
+                            await client.setBusy(false)
+                            ConnectionEvents.General(clientsList, connection)
+                            break;
+                        case CMDs.PowerBankInfo:
+                            res.send({finalResult: true, data: PowerBanksInfoQueries.PowerBankQueryResult(data)})
+                            await client.setBusy(false)
+                            ConnectionEvents.General(clientsList, connection)
+                            break;
+                        case CMDs.RentPowerBank:
 
-                        break;
-                    case CMDs.RentPowerBank:
+                            break;
+                        case CMDs.QueryAPN:
 
-                        break;
-                    case CMDs.QueryAPN:
-
-                        break;
-                    case CMDs.SetVoice:
-                        try{
+                            break;
+                        case CMDs.SetVoice:
                             res.send({finalResult: true, data: SetVoiceQueries.stationAnswer(data)})
                             client.setBusy(false)
                             ConnectionEvents.General(clientsList, connection)
-                        }catch (e){
-                            client.setBusy(false)
-                            res.send({finalResult: false, error: "intern error"})
-                            ConnectionEvents.General(clientsList, connection)
-                        }
-                        break;
-                    default:
-                        console.log("Ignoring data cause waiting for Query APN results only")
+                            break;
+                        default:
+                            console.log("Ignoring data cause waiting for Specific")
+                    }
+                }
+                catch (error){
+                    client.setBusy(false)
+                    res.send({finalResult: false, error: "intern error"})
+                    ConnectionEvents.General(clientsList, connection)
                 }
             }else{
                 ConsoleMsgs.error("Cmd is undefined, kicking out teh client")

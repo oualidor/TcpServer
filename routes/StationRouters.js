@@ -1,3 +1,4 @@
+const SetServerQueries = require("../Structures/SetServerQueries");
 const {SetVoiceQueries} = require("../Structures/SetVoiceQueries");
 const {QueryAPNQueries} = require("../Structures/QueryAPNQueries");
 const {RentPowerBankQueries} = require("../Structures/RentPowerBankQueries");
@@ -9,6 +10,29 @@ const {ConnectionOperations} = require("../Apis/ConnectionOperations");
 const {PowerBanksInfoQueries} = require("../Structures/PowerBanksInfoQueries");
 
 const StationRouters  = {
+    SetServer : async (req, res, clientsList) => {
+        try {
+            let { boxId } = req.params
+            let { address, port, heartBit }  = req.body
+            let client = await ConnectionOperations.getClientByBoxId(clientsList, boxId)
+            if (client == false) {
+                res.send({finalResult: false, error: "Station not logged in"})
+            } else {
+                client.setBusy(true)
+                let connection = client.connection
+                if(connection.write(SetServerQueries.serverRequest(address, port, heartBit))) {
+                    ConnectionEvents.ServerFirst(clientsList, client, res)
+                }
+                else {
+                    client.setBusy(false)
+                    res.send({finalResult: false, error: "could not send rent request"})
+                }
+            }
+        } catch (error) {
+            res.send({finaResult: false, error: "Request failed"})
+        }
+    },
+
     QueryInfo : async (req, res, clientsList) => {
         let {boxId} = req.params
         let client = await ConnectionOperations.getClientByBoxId(clientsList, boxId)
@@ -21,7 +45,7 @@ const StationRouters  = {
                 await client.setBusy(true)
                 let connection  = client.connection
                 if (connection.write(PowerBanksInfoQueries.serverQuery("0007", "01", "8a", "11223344"))) {
-                    ConnectionEvents.QueryInfo(clientsList, client, res)
+                    ConnectionEvents.ServerFirst(clientsList, client, res)
                 } else {
                     client.setBusy(false)
                     res.send({finalResult: false, error: "Failed to send request to station"})

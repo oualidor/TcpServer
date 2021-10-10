@@ -30,15 +30,22 @@ class ExpressServer extends EventEmitter {
     this.app.listen(EXPRESS_PORT, () => {
       console.log(`EXPRESS RUNNING on PORT ${EXPRESS_PORT}.`)
     });
+
     this.setRouters()
   }
 
 
-  setRouters(){
+  async setRouters(){
     this.app.get("/HeartBitExpress", (req, res)=>{res.send({finalResult: true, result: "Test work"})})
+
+    this.app.post("/Station/SetServer/:boxId", (req, res)=>{ StationRouters.SetServer(req, res, this.clientsList)})
+
     this.app.get("/Station/QueryInfo/:boxId", (req, res)=>{ StationRouters.QueryInfo(req, res, this.clientsList)})
+
     this.app.get("/Station/rent/:boxId", async (req, res)=>{await StationRouters.rentPowerBank(req, res, this.clientsList)})
+
     this.app.get("/Station/QueryAPN/:boxId/:APNIndex", QueryAPN.dataValidator, (req, res)=>{StationRouters.QueryAPN(req, res, this.clientsList)})
+
     this.app.get("/Station/SetVoice/:boxId/:level",  (req, res)=>{StationRouters.SetVoice(req, res, this.clientsList).then(r => {})})
   }
 
