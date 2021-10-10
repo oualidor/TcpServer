@@ -7,12 +7,16 @@ const {TCP_SESSIONS_TOKEN, TCP_VERSION} = require("../Apis/Config");
 
 const SetServerQueries = {
     serverRequest : (address, port, heartBit) => {
+        address = address.toString()
         address = stringToHex(address)+"00"
         let addressLen = dexToPackLen(address.length)
 
+        port = port.toString()
         port = stringToHex(port)+"00";
+
         let portLen = dexToPackLen(port.length)
         heartBit = parseInt(heartBit)
+
         heartBit = heartBit.toString(16)
         if(heartBit.length < 2){
             heartBit = "0"+heartBit
@@ -22,8 +26,9 @@ const SetServerQueries = {
         let result = CMDs.setServerAddress+ TCP_VERSION+ CheckSum + TCP_SESSIONS_TOKEN+addressLen+ address + portLen+ port+ heartBit
         let PackLen = dexToPackLen(result.length)
         result = PackLen+result;
-        return Buffer.from(result, "hex");
+        return result;
     },
+
     stationAnswer : (data) => {
         return ({
             length: parseInt(data.substr(0, 4), 16)*2,

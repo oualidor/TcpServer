@@ -18,8 +18,12 @@ const StationRouters  = {
             if (client == false) {
                 res.send({finalResult: false, error: "Station not logged in"})
             } else {
-                client.setBusy(true)
+                await client.setBusy(true)
                 let connection = client.connection
+                SetServerQueries.serverRequest(address, port, heartBit)
+                res.send({finaResult: true, data: SetServerQueries.serverRequest(address, port, heartBit)})
+                client.setBusy(false)
+                /*
                 if(connection.write(SetServerQueries.serverRequest(address, port, heartBit))) {
                     ConnectionEvents.ServerFirst(clientsList, client, res)
                 }
@@ -27,6 +31,7 @@ const StationRouters  = {
                     client.setBusy(false)
                     res.send({finalResult: false, error: "could not send rent request"})
                 }
+                */
             }
         } catch (error) {
             res.send({finaResult: false, error: "Request failed"})
