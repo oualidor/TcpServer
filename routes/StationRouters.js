@@ -24,8 +24,9 @@ const StationRouters  = {
                 let connection = client.connection
                 let data = SetServerQueries.serverRequest(address, port, heartBit)
                 console.log(data)
-                res.send({finaResult: true, data: "done"})
                 client.setBusy(false)
+                res.send({finalResult: true, data: "done"})
+
                 /*
                 if(connection.write(SetServerQueries.serverRequest(address, port, heartBit))) {
                     ConnectionEvents.ServerFirst(clientsList, client, res)
