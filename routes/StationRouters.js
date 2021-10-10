@@ -118,6 +118,7 @@ const StationRouters  = {
         try {
             let { boxId, level } = req.params
             level = parseInt(level)
+            console.log(level)
             let client = await ConnectionOperations.getClientByBoxId(clientsList, boxId)
             if (client == false) {
                 res.send({finalResult: false, error: "Station not logged in"})

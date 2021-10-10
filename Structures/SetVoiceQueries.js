@@ -5,10 +5,8 @@ const {TCP_SESSIONS_TOKEN, TCP_VERSION} = require("../Apis/Config");
 const SetVoiceQueries = {
     serverRequest : (level) => {
         level = parseInt(level)
-        level = level.toString(16)
-
+        level = "0"+level.toString(16)
         let PackLen = dexToPackLen((CMDs.login + TCP_VERSION + level + TCP_SESSIONS_TOKEN + level).length)
-        console.log(PackLen + CMDs.SetVoice + TCP_VERSION + level + TCP_SESSIONS_TOKEN + level)
         return Buffer.from(PackLen + CMDs.SetVoice + TCP_VERSION + level + TCP_SESSIONS_TOKEN + level, "hex");
     },
 
