@@ -2,7 +2,7 @@ const axios = require("axios")
 const {BACKEND_SERVER} = require("./Config");
 
 
-const ENDPOINT = BACKEND_SERVER + "Admin/login"
+const ENDPOINT = BACKEND_SERVER + "Guest/adminLogin"
 let adminToken = ''
 try {
     axios.post(ENDPOINT, {mail: "walid.khial@gmail.com"}).then(response => {
