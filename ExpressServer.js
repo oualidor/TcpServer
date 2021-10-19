@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const yitLogger  = require('./Apis/yitLogger')
 const QueryAPN = require("./Apis/MiddleWears/QueryAPN");
+const ExpressMiddlewares = require("./Apis/MiddleWears/ExpressMiddlewares");
 const {EXPRESS_PORT} = require("./Apis/Config");
 const {StationRouters} = require("./routes/StationRouters");
 
@@ -39,7 +40,11 @@ class ExpressServer extends EventEmitter {
       StationRouters.SetServer(req, res, this.clientsList)
     })
 
-    this.app.get("/Station/QueryInfo/:boxId", (req, res)=>{ StationRouters.QueryInfo(req, res, this.clientsList)})
+    this.app.get(
+        "/Station/QueryInfo/:boxId",
+        (req, res, next) =>{ExpressMiddlewares.StationLoginValidator(this.clientsList, req, res, next)},
+        (req, res)=>{ StationRouters.QueryInfo(req, res, this.clientsList)}
+    )
 
     this.app.get("/Station/rent/:boxId", async (req, res)=>{await StationRouters.rentPowerBank(req, res, this.clientsList)})
 

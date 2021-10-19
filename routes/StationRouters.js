@@ -36,25 +36,21 @@ const StationRouters  = {
     },
 
     QueryInfo : async (req, res, clientsList) => {
-        let {boxId} = req.params
-        let client = await ConnectionOperations.getClientByBoxId(clientsList, boxId)
-        if(client == false){
-            res.send({finalResult: false, error: "Station not logged or busy"})
-        }else {
-            try{
-                await client.setBusy(true)
-                let connection  = client.connection
-                if (connection.write(PowerBanksInfoQueries.serverQuery("0007", "01", "8a", "11223344"))) {
-                    ConnectionEvents.ServerFirst(clientsList, client, res)
-                } else {
-                    client.setBusy(false)
-                    res.send({finalResult: false, error: "Failed to send request to station"})
-                }
-            }catch (error){
+        let client = req.client
+        try{
+            await client.setBusy(true)
+            let connection  = client.connection
+            if (connection.write(PowerBanksInfoQueries.serverQuery("0007", "01", "8a", "11223344"))) {
+                ConnectionEvents.ServerFirst(clientsList, client, res)
+            } else {
                 client.setBusy(false)
-                res.send({finalResult: false, error: "Error while sending request to the station"})
+                res.send({finalResult: false, error: "Failed to send request to station"})
             }
+        }catch (error){
+            client.setBusy(false)
+            res.send({finalResult: false, error: "Error while sending request to the station"})
         }
+
     },
 
     rentPowerBank : async (req, res, clientsList) => {
