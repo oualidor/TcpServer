@@ -5,7 +5,7 @@ const {SocketServer} = require("./SocketServer");
 const {ExpressServer} = require("./ExpressServer");
 
 async function adminLogin(mail) {
-    let endpoint = BACKEND_SERVER + "Admin/login"
+    let endpoint = BACKEND_SERVER + "Guest/adminLogin"
     let rs = await HttpRequestHandler.POST(endpoint, {'mail': mail})
     return rs
 }

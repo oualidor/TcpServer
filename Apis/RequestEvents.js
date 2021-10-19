@@ -25,8 +25,8 @@ async function answerPowerBankReturn(clientsList, connection, stationRequest, re
             if(currentClient != false){
                 let url = BACKEND_SERVER + 'Admin/Station/returnPowerBank/'
                 let reqData = {
-                    "StationId": currentClient.boxId,
-                    "clientId": "1",
+                    "stationId": currentClient.boxId,
+                    "clientId": "0",
                     "powerBankId": stationRequest.powerBankId
                 }
                 let rs = await HttpRequestHandler.POST(url, reqData)
@@ -45,8 +45,6 @@ async function answerPowerBankReturn(clientsList, connection, stationRequest, re
         ConsoleMsgs.error(e)
     }
 }
-
-
 
 
 const RequestEvents = {

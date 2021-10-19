@@ -12,8 +12,6 @@ const {PowerBanksInfoQueries} = require("../Structures/PowerBanksInfoQueries");
 const StationRouters  = {
     SetServer : async (req, res, clientsList) => {
         try {
-            //001f 63 01 8a 11223344 000e 3132312e34312e36302e32333200 0005 3838383800 1e
-            //001f 63 01 8a 11223344 000e 3132312e34312e36302e32333200 0005 3838383800 1e
             let { boxId } = req.params
             let { address, port, heartBit }  = req.body
             let client = await ConnectionOperations.getClientByBoxId(clientsList, boxId)
