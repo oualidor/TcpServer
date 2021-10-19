@@ -8,7 +8,7 @@ const {HttpRequestHandler} = require("./Apis/HttpRequestHandler");
 const {BACKEND_SERVER} = require("./Apis/Config");
 const {ConsoleMsgs} = require("./Apis/ConsoleMsgs");
 const {HOST, TCP_PORT} = require("./Apis/Config");
-const {ConnectionEvents} = require("./Apis/ConnectionEvents"); // import net
+const ConnectionEvents = require("./Apis/ConnectionEvents"); // import net
 
 
 class SocketServer extends EventEmitter{
@@ -25,6 +25,8 @@ class SocketServer extends EventEmitter{
                 this.answerLogin(this.clientsList, socket, loginStationRequest).then(r => {
                     if(r !== false){
                         ConnectionEvents.General(this.clientsList , socket)
+                    }else {
+                        socket.terminate()
                     }
                 })
             })
@@ -118,6 +120,7 @@ class SocketServer extends EventEmitter{
             return false
         }
     }
+
     addClient(client){
         this.clientsList.push(client)
         this.emit("listUpdate")

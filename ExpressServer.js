@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const yitLogger  = require('./Apis/yitLogger')
 const QueryAPN = require("./Apis/MiddleWears/QueryAPN");
 const {EXPRESS_PORT} = require("./Apis/Config");
-const {ConnectionEvents} = require("./Apis/ConnectionEvents");
+const ConnectionEvents = require("./Apis/ConnectionEvents");
 const {StationRouters} = require("./routes/StationRouters");
 
 class ExpressServer extends EventEmitter {
@@ -14,8 +14,6 @@ class ExpressServer extends EventEmitter {
     this.adminToken = adminToken
     this.clientsList = []
     this.app = express();
-    this.app.set('views', path.join(__dirname, 'views'));
-    this.app.set('view engine', 'ejs');
     this.app.use(yitLogger);
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
@@ -39,7 +37,6 @@ class ExpressServer extends EventEmitter {
     this.app.get("/HeartBitExpress", (req, res)=>{res.send({finalResult: true, result: "Test work"})})
 
     this.app.post("/Station/SetServer/:boxId", (req, res)=>{
-      //res.send({finalResult: true, data: req.body})
       StationRouters.SetServer(req, res, this.clientsList)
     })
 
@@ -47,7 +44,11 @@ class ExpressServer extends EventEmitter {
 
     this.app.get("/Station/rent/:boxId", async (req, res)=>{await StationRouters.rentPowerBank(req, res, this.clientsList)})
 
-    this.app.get("/Station/QueryAPN/:boxId/:APNIndex", QueryAPN.dataValidator, (req, res)=>{StationRouters.QueryAPN(req, res, this.clientsList)})
+    this.app.get(
+        "/Station/QueryAPN/:boxId/:APNIndex",
+        (req, res, next)=>{QueryAPN.dataValidator(req, res, next)},
+        (req, res)=>{StationRouters.QueryAPN(req, res, this.clientsList)}
+    )
 
     this.app.get("/Station/SetVoice/:boxId/:level",  (req, res)=>{StationRouters.SetVoice(req, res, this.clientsList).then(r => {})})
   }

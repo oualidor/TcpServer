@@ -3,7 +3,7 @@ const {SetVoiceQueries} = require("../Structures/SetVoiceQueries");
 const {QueryAPNQueries} = require("../Structures/QueryAPNQueries");
 const {RentPowerBankQueries} = require("../Structures/RentPowerBankQueries");
 const {ConsoleMsgs} = require("../Apis/ConsoleMsgs");
-const {ConnectionEvents} = require("../Apis/ConnectionEvents");
+const ConnectionEvents = require("../Apis/ConnectionEvents");
 const {BACKEND_SERVER} = require("../Apis/Config");
 const {HttpRequestHandler} = require("../Apis/HttpRequestHandler");
 const {ConnectionOperations} = require("../Apis/ConnectionOperations");
@@ -52,7 +52,7 @@ const StationRouters  = {
                     client.setBusy(false)
                     res.send({finalResult: false, error: "Failed to send request to station"})
                 }
-            }catch (e){
+            }catch (error){
                 client.setBusy(false)
                 res.send({finalResult: false, error: "Error while sending request to the station"})
             }
@@ -73,7 +73,7 @@ const StationRouters  = {
                         client.setBusy(true)
                         let connection = client.connection
                         if (connection.write(RentPowerBankQueries.serverRequest("0008", "01", "8a", "11223344", rs.data.powerBanksList[0].slot))) {
-                            ConnectionEvents.Rent(clientsList, client, res)
+                            ConnectionEvents.ServerFirst(clientsList, client, res)
                         } else {
                             client.setBusy(false)
                             res.send({finalResult: false, error: "could not send rent request"})
@@ -104,7 +104,7 @@ const StationRouters  = {
                 await client.setBusy(true)
                 let connection = client.connection
                 if (connection.write(QueryAPNQueries.serverRequest("8a", APNIndex))) {
-                    ConnectionEvents.QueryAPN(clientsList, client, res)
+                    ConnectionEvents.ServerFirst(clientsList, client, res)
                 } else {
                     client.setBusy(false)
                     res.send({finaResult: false, error: "could not send rent request"})
