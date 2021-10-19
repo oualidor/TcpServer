@@ -36,15 +36,11 @@ class ExpressServer extends EventEmitter {
   async setRouters(){
     this.app.get("/HeartBitExpress", (req, res)=>{res.send({finalResult: true, result: "Test work"})})
 
-    this.app.post("/Station/SetServer/:boxId", (req, res)=>{
-      StationRouters.SetServer(req, res, this.clientsList)
-    })
+    this.app.use((req, res, next) =>{ExpressMiddlewares.StationLoginValidator(this.clientsList, req, res, next)})
 
-    this.app.get(
-        "/Station/QueryInfo/:boxId",
-        (req, res, next) =>{ExpressMiddlewares.StationLoginValidator(this.clientsList, req, res, next)},
-        (req, res)=>{ StationRouters.QueryInfo(req, res, this.clientsList)}
-    )
+    this.app.post("/Station/SetServer/:boxId", (req, res)=>{StationRouters.SetServer(req, res, this.clientsList)})
+
+    this.app.get("/Station/QueryInfo/:boxId", (req, res)=>{ StationRouters.QueryInfo(req, res, this.clientsList)})
 
     this.app.get("/Station/rent/:boxId", async (req, res)=>{await StationRouters.rentPowerBank(req, res, this.clientsList)})
 
