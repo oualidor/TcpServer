@@ -12,5 +12,5 @@ const CMDs =  {
 }
 
 
-module.exports =  {CMDs}
+module.exports =  CMDs
 
