@@ -55,11 +55,8 @@ const StationRouters  = {
 
     rentPowerBank : async (req, res, clientsList) => {
         try {
-            let { boxId } = req.params
-            let client = await ConnectionOperations.getClientByBoxId(clientsList, boxId)
-            if (client == false) {
-                res.send({finalResult: false, error: "Station not logged in"})
-            } else {
+            let boxId = req.boxId
+            let client = req.client
                 let requestAddress = BACKEND_SERVER+'Admin/Station/getRealTimeInfo/'+boxId
                 const rs = await HttpRequestHandler.GET(requestAddress)
                 if (rs.finalResult === true){
@@ -80,7 +77,7 @@ const StationRouters  = {
                     console.log(rs)
                     res.send({finaResult: false, error: "error while communicating with back end"})
                 }
-            }
+
         } catch (error) {
             res.send({finaResult: false, error: "could not query station for info"})
         }
@@ -110,22 +107,16 @@ const StationRouters  = {
 
     SetVoice : async (req, res, clientsList) => {
         try {
-            let { boxId, level } = req.params
+            let { level } = req.params, {boxId, client} = req
             level = parseInt(level)
-            console.log(level)
-            let client = await ConnectionOperations.getClientByBoxId(clientsList, boxId)
-            if (client == false) {
-                res.send({finalResult: false, error: "Station not logged in"})
-            } else {
-                client.setBusy(true)
-                let connection = client.connection
-                if(connection.write(SetVoiceQueries.serverRequest(level))) {
-                    ConnectionEvents.ServerFirst(clientsList, client, res)
-                }
-                else {
-                    client.setBusy(false)
-                    res.send({finalResult: false, error: "could not send rent request"})
-                }
+            client.setBusy(true)
+            let connection = client.connection
+            if(connection.write(SetVoiceQueries.serverRequest(level))) {
+                ConnectionEvents.ServerFirst(clientsList, client, res)
+            }
+            else {
+                client.setBusy(false)
+                res.send({finalResult: false, error: "could not send rent request"})
             }
         } catch (error) {
             res.send({finaResult: false, error: "could not query station for info"})
