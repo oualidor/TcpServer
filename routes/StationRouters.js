@@ -71,6 +71,7 @@ const StationRouters  = {
                         client.setBusy(true)
                         let connection = client.connection
                         if (connection.write(RentPowerBankQueries.serverRequest("0008", "01", "8a", "11223344", rs.data.powerBanksList[0].slot))) {
+                            ConsoleMsgs.debug("request sendt")
                             ConnectionEvents.ServerFirst(clientsList, client, res)
                         } else {
                             client.setBusy(false)

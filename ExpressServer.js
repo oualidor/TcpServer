@@ -5,7 +5,6 @@ const cookieParser = require('cookie-parser');
 const yitLogger  = require('./Apis/yitLogger')
 const QueryAPN = require("./Apis/MiddleWears/QueryAPN");
 const {EXPRESS_PORT} = require("./Apis/Config");
-const ConnectionEvents = require("./Apis/ConnectionEvents");
 const {StationRouters} = require("./routes/StationRouters");
 
 class ExpressServer extends EventEmitter {

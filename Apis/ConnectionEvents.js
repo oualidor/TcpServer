@@ -7,6 +7,7 @@ const CMDs= require("./CMDs");
 const ConsoleMsgs = require("./ConsoleMsgs");
 const RequestEvents = require("./RequestEvents");
 const PowerBanksInfoQueries = require("../Structures/PowerBanksInfoQueries");
+
 const ConnectionEvents = {
     General : (clientsList, connection) =>{
         connection.removeAllListeners("data")
