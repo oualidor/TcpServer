@@ -22,8 +22,11 @@ class SocketServer extends EventEmitter{
             socket.once("data", (data)=>{
                 data = data.toString("hex")
                 let loginStationRequest = LoginQueries.stationRequest(data)
-                this.answerLogin(this.clientsList, socket, loginStationRequest)
-                ConnectionEvents.General(this.clientsList , socket)
+                this.answerLogin(this.clientsList, socket, loginStationRequest).then(r => {
+                    if(r !== false){
+                        ConnectionEvents.General(this.clientsList , socket)
+                    }
+                })
             })
             socket.on("error", (error)=>{
                 ConsoleMsgs.debug(error)
@@ -91,23 +94,28 @@ class SocketServer extends EventEmitter{
                         newClient.setBusy(false)
                         this.addClient(newClient)
                         ConsoleMsgs.success("Client logged in successfully")
+                        return true
                     }else {
                         ConsoleMsgs.error("Could not send login answer to Station")
                         this.removeClientByConnection(connection)
+                        return false
                     }
                 }catch (e){
                     ConsoleMsgs.error("could not write data to station")
+                    return false
                 }
             } else {
                 console.log(rs)
                 ConsoleMsgs.error("Refusing station login due an error while communication with back end")
                 let answer = LoginAnswer("0008", "01", '01', '11223344', "00")
                 connection.write(Buffer.from(answer, 'hex'))
+                return false
             }
         }catch (error) {
             ConsoleMsgs.error("Refusing station login due an error")
             let answer = LoginAnswer("0008", "01", '01', '11223344', "00")
             connection.write(Buffer.from(answer, 'hex'))
+            return false
         }
     }
     addClient(client){
