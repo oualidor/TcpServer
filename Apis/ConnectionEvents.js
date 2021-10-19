@@ -39,7 +39,6 @@ const ConnectionEvents = {
                             ConnectionEvents.General(clientsList, connection)
                             break;
                         case CMDs.PowerBankInfo:
-                            ConsoleMsgs.debug(" found")
                             res.send({finalResult: true, data: PowerBanksInfoQueries.PowerBankQueryResult(data)})
                             await client.setBusy(false)
                             ConnectionEvents.General(clientsList, connection)

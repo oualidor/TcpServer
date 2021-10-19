@@ -18,7 +18,7 @@ class SocketServer extends EventEmitter{
         this.clientsList = []
         let server = net.createServer([{allowHalfOpen: false, pauseOnConnect: false}]);
         server.on("connection", socket => {
-            ConsoleMsgs.debug("Client handshake")
+            ConsoleMsgs.success("Client handshake")
             socket.once("data", (data)=>{
                 data = data.toString("hex")
                 let loginStationRequest = LoginQueries.stationRequest(data)
@@ -31,10 +31,10 @@ class SocketServer extends EventEmitter{
                 })
             })
             socket.on("error", (error)=>{
-                ConsoleMsgs.debug(error)
+
             })
             socket.on("connect", ()=>{
-                ConsoleMsgs.debug("connect triggered")
+
             })
             socket.on("end", ()=>{
                 console.log("Connection ended, client disconnected")
@@ -42,16 +42,16 @@ class SocketServer extends EventEmitter{
                 this.removeClientByConnection(socket)
             })
             socket.on("timeout", ()=>{
-                ConsoleMsgs.debug("connect timout")
+
             })
             socket.on("lookup", (error, address, family, host)=>{
-                ConsoleMsgs.debug("connect lookup")
+
             })
             socket.on("drain",  ()=>{
-                ConsoleMsgs.debug("connect drain")
+
             })
             socket.on("close", (hadError)=>{
-                ConsoleMsgs.debug("connect close")
+
             })
         })
 
@@ -79,7 +79,7 @@ class SocketServer extends EventEmitter{
         } )
 
         server.on("listening", ()=>{
-            ConsoleMsgs.debug("Server listening")
+
         })
     }
 
