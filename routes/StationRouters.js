@@ -107,7 +107,7 @@ const StationRouters  = {
 
     SetVoice : async (req, res, clientsList) => {
         try {
-            let { level } = req.params, {boxId, client} = req
+            let { level } = req.params, {client} = req
             level = parseInt(level)
             client.setBusy(true)
             let connection = client.connection

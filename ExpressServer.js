@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const yitLogger  = require('./Apis/yitLogger')
 const QueryAPN = require("./Apis/MiddleWears/QueryAPN");
 const ExpressMiddlewares = require("./Apis/MiddleWears/ExpressMiddlewares");
+const TestRouter = require("./routes/TestRouter");
 const {EXPRESS_PORT} = require("./Apis/Config");
 const {StationRouters} = require("./routes/StationRouters");
 
@@ -34,34 +35,10 @@ class ExpressServer extends EventEmitter {
 
 
   async setRouters(){
-    this.app.get("/HeartBitExpress", (req, res)=>{res.send({finalResult: true, result: "Test work"})})
 
-    this.app.post("/Station/SetServer/:boxId",
-        (req, res, next) => ExpressMiddlewares.StationLoginValidator(this.clientsList, req, res, next),
-        (req, res)=>{
-      StationRouters.SetServer(req, res, this.clientsList)
-    })
+    this.app.use("/Station/", (req, res, next) =>ExpressMiddlewares.StationLoginValidator(this.clientsList, req, res, next), TestRouter)
 
-    this.app.get(
-        "/Station/QueryInfo/:boxId",
-        (req, res, next) =>ExpressMiddlewares.StationLoginValidator(this.clientsList, req, res, next),
-        (req, res)=>{ StationRouters.QueryInfo(req, res, this.clientsList)}
-    )
 
-    this.app.get("/Station/rent/:boxId",
-        (req, res, next) =>ExpressMiddlewares.StationLoginValidator(this.clientsList, req, res, next),
-        async (req, res)=>{await StationRouters.rentPowerBank(req, res, this.clientsList)})
-
-    this.app.get(
-        "/Station/QueryAPN/:boxId/:APNIndex",
-        (req, res, next) =>ExpressMiddlewares.StationLoginValidator(this.clientsList, req, res, next),
-        (req, res, next)=>{QueryAPN.dataValidator(req, res, next)},
-        (req, res)=>{StationRouters.QueryAPN(req, res, this.clientsList)}
-    )
-
-    this.app.get("/Station/SetVoice/:boxId/:level",
-        (req, res, next) =>ExpressMiddlewares.StationLoginValidator(this.clientsList, req, res, next),
-        (req, res)=>{StationRouters.SetVoice(req, res, this.clientsList).then(r => {})})
   }
 
   addClient(client){
