@@ -3,14 +3,13 @@ const SetServerQueries = require("../Structures/SetServerQueries");
 const {SetVoiceQueries} = require("../Structures/SetVoiceQueries");
 const {QueryAPNQueries} = require("../Structures/QueryAPNQueries");
 const {RentPowerBankQueries} = require("../Structures/RentPowerBankQueries");
-const {CMDs} = require("./CMDs");
-const {ConsoleMsgs} = require("./ConsoleMsgs");
-const {RequestEvents} = require("./RequestEvents");
-const {PowerBanksInfoQueries} = require("../Structures/PowerBanksInfoQueries");
+const CMDs= require("./CMDs");
+const ConsoleMsgs = require("./ConsoleMsgs");
+const RequestEvents = require("./RequestEvents");
+const PowerBanksInfoQueries = require("../Structures/PowerBanksInfoQueries");
 const ConnectionEvents = {
     General : (clientsList, connection) =>{
         connection.removeAllListeners("data")
-        ConsoleMsgs.success("General Event ON")
         connection.on("data", data => {
             data = data.toString('hex')
             if (data == undefined || data == null) {console.log("no data found")}

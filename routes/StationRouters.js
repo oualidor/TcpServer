@@ -2,12 +2,12 @@ const SetServerQueries = require("../Structures/SetServerQueries");
 const {SetVoiceQueries} = require("../Structures/SetVoiceQueries");
 const {QueryAPNQueries} = require("../Structures/QueryAPNQueries");
 const {RentPowerBankQueries} = require("../Structures/RentPowerBankQueries");
-const {ConsoleMsgs} = require("../Apis/ConsoleMsgs");
+const ConsoleMsgs = require("../Apis/ConsoleMsgs");
 const ConnectionEvents = require("../Apis/ConnectionEvents");
 const {BACKEND_SERVER} = require("../Apis/Config");
 const {HttpRequestHandler} = require("../Apis/HttpRequestHandler");
 const {ConnectionOperations} = require("../Apis/ConnectionOperations");
-const {PowerBanksInfoQueries} = require("../Structures/PowerBanksInfoQueries");
+const PowerBanksInfoQueries = require("../Structures/PowerBanksInfoQueries");
 
 const StationRouters  = {
     SetServer : async (req, res, clientsList) => {
@@ -39,11 +39,9 @@ const StationRouters  = {
         let {boxId} = req.params
         let client = await ConnectionOperations.getClientByBoxId(clientsList, boxId)
         if(client == false){
-            ConsoleMsgs.error("Query info found Client busy")
             res.send({finalResult: false, error: "Station not logged or busy"})
         }else {
             try{
-                ConsoleMsgs.success("Query info found Client found free")
                 await client.setBusy(true)
                 let connection  = client.connection
                 if (connection.write(PowerBanksInfoQueries.serverQuery("0007", "01", "8a", "11223344"))) {
@@ -97,10 +95,8 @@ const StationRouters  = {
         let client = ConnectionOperations.getClientByBoxId(clientsList, boxId)
         try {
             if (client == false) {
-                ConsoleMsgs.error("QueryAPN found Client busy")
                 res.send({finalResult: false, error: "Station not logged in or busy"})
             } else {
-                ConsoleMsgs.success("QueryAPN found Client found free")
                 await client.setBusy(true)
                 let connection = client.connection
                 if (connection.write(QueryAPNQueries.serverRequest("8a", APNIndex))) {

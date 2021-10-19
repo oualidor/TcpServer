@@ -1,11 +1,10 @@
 const {HeartBitAnswer} = require("../Structures/HeartBitAnswer");
-
 const RequestOperations = require("./RequestOperations");
 const {HttpRequestHandler} = require("./HttpRequestHandler");
 const {BACKEND_SERVER} = require("./Config");
-const {CMDs} = require("./CMDs");
+const CMDs= require("./CMDs");
 const {ReturnPowerBank} = require("../Structures/ReturnPowerBank");
-const {ConsoleMsgs} = require("./ConsoleMsgs");
+const ConsoleMsgs = require("./ConsoleMsgs");
 const {CmdExtractor} = require("./RequestOperations");
 const {ConnectionOperations} = require("./ConnectionOperations");
 function answerHeartBit (connection){
@@ -74,4 +73,4 @@ const RequestEvents = {
 }
 
 
-module.exports = {RequestEvents}
+module.exports = RequestEvents

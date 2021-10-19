@@ -1,4 +1,4 @@
-const {CMDs} = require( "../Apis/CMDs");
+const CMDs= require( "../Apis/CMDs");
 
 
 const RentPowerBankQueries = {

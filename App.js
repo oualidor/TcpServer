@@ -1,4 +1,4 @@
-const {ConsoleMsgs} = require("./Apis/ConsoleMsgs");
+const ConsoleMsgs = require("./Apis/ConsoleMsgs");
 const {HttpRequestHandler} = require("./Apis/HttpRequestHandler");
 const {BACKEND_SERVER} = require("./Apis/Config");
 const {SocketServer} = require("./SocketServer");

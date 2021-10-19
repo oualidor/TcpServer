@@ -6,7 +6,7 @@ const {LoginQueries} = require("./Structures/LoginQueries");
 const {LoginAnswer} = require("./Structures/LoginQueries");
 const {HttpRequestHandler} = require("./Apis/HttpRequestHandler");
 const {BACKEND_SERVER} = require("./Apis/Config");
-const {ConsoleMsgs} = require("./Apis/ConsoleMsgs");
+const ConsoleMsgs = require("./Apis/ConsoleMsgs");
 const {HOST, TCP_PORT} = require("./Apis/Config");
 const ConnectionEvents = require("./Apis/ConnectionEvents"); // import net
 

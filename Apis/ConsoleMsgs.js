@@ -13,4 +13,4 @@ const ConsoleMsgs = {
     },
 }
 
-module.exports = {ConsoleMsgs}
+module.exports = ConsoleMsgs
