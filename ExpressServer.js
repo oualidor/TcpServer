@@ -7,6 +7,7 @@ const QueryAPN = require("./Apis/MiddleWears/QueryAPN");
 const ExpressMiddlewares = require("./Apis/MiddleWears/ExpressMiddlewares");
 const {EXPRESS_PORT} = require("./Apis/Config");
 const {StationRouters} = require("./routes/StationRouters");
+const winston = require('winston');
 
 class ExpressServer extends EventEmitter {
   constructor(adminToken) {
@@ -17,7 +18,6 @@ class ExpressServer extends EventEmitter {
     this.app.use(yitLogger);
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
-    this.app.use(cookieParser());
 
     this.app.once('error', function(err) {
       if (err.code === 'EADDRINUSE') {
@@ -32,7 +32,10 @@ class ExpressServer extends EventEmitter {
     this.setRouters()
   }
 
+  configure(){
 
+
+  }
   async setRouters(){
     this.app.get("/HeartBitExpress", (req, res)=>{res.send({finalResult: true, result: "Test work"})})
 

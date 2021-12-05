@@ -17,6 +17,7 @@
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "public-ip": "^4.0.4",
-    "swagger-ui-express": "^4.1.6"
+    "swagger-ui-express": "^4.1.6",
+    "winston": "^3.3.3"
   }
 }

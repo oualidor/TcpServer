@@ -9,18 +9,19 @@ const PowerBanksInfoQueries = require("../Structures/PowerBanksInfoQueries");
 
 const StationRouters  = {
     SetServer : async (req, res, clientsList) => {
-        try {
+        try{
             let { client } = req
             let { address, port, heartBit }  = req.body
             await client.setBusy(true)
             let connection = client.connection
             let data = SetServerQueries.serverRequest(address, port, heartBit)
             if(connection.write(data)) ConnectionEvents.ServerFirst(clientsList, client, res)
-            else {
+            else{
                 client.setBusy(false)
                 res.send({finalResult: false, error: "could not send rent request"})
             }
-        } catch (error) {
+        }
+        catch(error){
             console.log(error)
             res.send({finaResult: false, error: "Request failed"})
         }

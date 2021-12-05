@@ -21,7 +21,6 @@ const ConnectionEvents = {
             }
             RequestEvents.answerRequest(clientsList, connection, data).then(r=>{})
         })
-
     },
 
     ServerFirst: (clientsList, client, res)=>{

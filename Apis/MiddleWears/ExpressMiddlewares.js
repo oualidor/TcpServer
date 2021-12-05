@@ -5,9 +5,9 @@ const ExpressMiddlewares = {
         let {boxId} = req.params
         let client = await ConnectionOperations.getClientByBoxId(clientsList, boxId)
         if (client == false){
-            res.send({finalResult: false, error: "Station not logged or busy"})
+            res.send({finalResult: false, error: "Station not logged in"})
         }
-        else {
+        else{
             req.client = client
             req.boxId = boxId
             next()

@@ -16,7 +16,7 @@ class SocketServer extends EventEmitter{
         super();
 
         this.clientsList = []
-        let server = net.createServer([{allowHalfOpen: false, pauseOnConnect: false}]);
+        let server = net.createServer();
         server.on("connection", socket => {
             ConsoleMsgs.success("Client handshake")
             socket.once("data", (data)=>{
