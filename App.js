@@ -5,9 +5,9 @@ const {BACKEND_SERVER} = require("./Apis/Config");
 const {SocketServer} = require("./SocketServer");
 const {ExpressServer} = require("./ExpressServer");
 
-async function adminLogin(mail) {
+async function adminLogin(mail, password) {
     let endpoint = BACKEND_SERVER + "Guest/adminLogin"
-    let rs = await HttpRequestHandler.POST(endpoint, {'mail': mail})
+    let rs = await HttpRequestHandler.POST(endpoint, {'mail': mail, 'password':  password})
     return rs
 }
 async function main(){
