@@ -11,7 +11,7 @@ async function adminLogin(mail, password) {
     return rs
 }
 async function main(){
-    let adminLoginResult = await adminLogin('walid.khial@gmail.com')
+    let adminLoginResult = await adminLogin('admin@cbc-altec.dz', '0099')
     if(adminLoginResult.finalResult === true){
         ConsoleMsgs.success("Logged In as admin")
 
