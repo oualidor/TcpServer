@@ -88,6 +88,7 @@ class SocketServer extends EventEmitter{
             let url = BACKEND_SERVER + 'Admin/Station/getOneByPublicId/' + currentConnectionBoxId
             let rs = await HttpRequestHandler.GET(url)
             if (rs.finalResult == true) {
+                this.removeClientByBoxId(loginRequest.boxId)
                 let newClient = new TcpClient(currentConnectionBoxId, connection)
                 let answer = LoginQueries.serverAnswer("01", "01")
                 try{
@@ -129,6 +130,14 @@ class SocketServer extends EventEmitter{
     removeClientByConnection(connection){
         this.clientsList = this.clientsList.filter(client => {
             if(client.connection == connection) return false
+            return true
+        })
+        this.emit("listUpdate")
+    }
+
+    removeClientByBoxId(boxId){
+        this.clientsList = this.clientsList.filter(client => {
+            if(client.boxId == boxId) return false
             return true
         })
         this.emit("listUpdate")
