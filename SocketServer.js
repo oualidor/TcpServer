@@ -14,7 +14,6 @@ const ConnectionEvents = require("./Apis/ConnectionEvents"); // import net
 class SocketServer extends EventEmitter{
     constructor() {
         super();
-
         this.clientsList = []
         let server = net.createServer();
         server.on("connection", socket => {
