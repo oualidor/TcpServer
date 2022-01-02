@@ -54,10 +54,10 @@ const StationRouters  = {
                 if (rs.finalResult === true){
                     console.log(rs)
                     console.log("////////")
-                    if (rs['data']['powerBanksList'].length > 0) {
+                    if (rs['result']['powerBanksList'].length > 0) {
                         client.setBusy(true)
                         let connection = client.connection
-                        if (connection.write(RentPowerBankQueries.serverRequest("0008", "01", "8a", "11223344", rs.data.powerBanksList[0].slot))) {
+                        if (connection.write(RentPowerBankQueries.serverRequest("0008", "01", "8a", "11223344", rs.result.powerBanksList[0].slot))) {
                             ConnectionEvents.ServerFirst(clientsList, client, res)
                         } else {
                             client.setBusy(false)
