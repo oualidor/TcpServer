@@ -15,7 +15,7 @@ class ExpressServer extends EventEmitter {
     this.adminToken = adminToken
     this.clientsList = []
     this.app = express();
-    this.app.use(yitLogger);
+    //this.app.use(yitLogger);
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
 
