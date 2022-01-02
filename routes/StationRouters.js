@@ -6,6 +6,7 @@ const ConnectionEvents = require("../Apis/ConnectionEvents");
 const {BACKEND_SERVER} = require("../Apis/Config");
 const {HttpRequestHandler} = require("../Apis/HttpRequestHandler");
 const PowerBanksInfoQueries = require("../Structures/PowerBanksInfoQueries");
+const e = require("express");
 
 const StationRouters  = {
     SetServer : async (req, res, clientsList) => {
@@ -69,6 +70,7 @@ const StationRouters  = {
                 }
 
         } catch (error) {
+            console.log(error)
             res.send({finaResult: false, error: "could not query station for info"})
         }
     },

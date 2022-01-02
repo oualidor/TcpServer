@@ -7,9 +7,9 @@ const {ExpressServer} = require("./ExpressServer");
 
 async function adminLogin(mail, password) {
     let endpoint = BACKEND_SERVER + "Guest/adminLogin"
-    let rs = await HttpRequestHandler.POST(endpoint, {'mail': mail, 'password':  password})
-    return rs
+    return await HttpRequestHandler.POST(endpoint, {'mail': mail, 'password': password})
 }
+
 async function main(){
     let adminLoginResult = await adminLogin('admin@cbc-altec.dz', '0099')
     if(adminLoginResult.finalResult === true){

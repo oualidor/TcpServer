@@ -59,8 +59,8 @@ const RequestEvents = {
                             answerHeartBit(connection)
                             break
                         case CMDs.ReturnPowerBank:
-                            let stationRequest = await ReturnPowerBank.stationRequest(data)
-                            await answerPowerBankReturn(clientsList, connection, stationRequest, "01")
+                            let ReturnPowerBankStationRequest = ReturnPowerBank.stationRequest(data)
+                            await answerPowerBankReturn(clientsList, connection, ReturnPowerBankStationRequest, "01")
                             break
                     }
                 } else {
