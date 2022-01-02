@@ -53,7 +53,8 @@ const StationRouters  = {
                 const rs = await HttpRequestHandler.GET(requestAddress)
                 if (rs.finalResult === true){
                     console.log(rs)
-                    if (rs.data.powerBanksList.length > 0) {
+                    console.log(rs.data['powerBanksList'])
+                    if (rs.data['powerBanksList'].length > 0) {
                         client.setBusy(true)
                         let connection = client.connection
                         if (connection.write(RentPowerBankQueries.serverRequest("0008", "01", "8a", "11223344", rs.data.powerBanksList[0].slot))) {
