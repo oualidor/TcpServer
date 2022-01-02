@@ -48,6 +48,7 @@ const StationRouters  = {
     rentPowerBank : async (req, res, clientsList) => {
         try {
             let { client, boxId} = req
+                console.log(boxId)
                 let requestAddress = BACKEND_SERVER+'Admin/Station/getRealTimeInfo/'+boxId
                 const rs = await HttpRequestHandler.GET(requestAddress)
                 if (rs.finalResult === true){
