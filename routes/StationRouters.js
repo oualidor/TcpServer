@@ -51,6 +51,7 @@ const StationRouters  = {
                 let requestAddress = BACKEND_SERVER+'Admin/Station/getRealTimeInfo/'+boxId
                 const rs = await HttpRequestHandler.GET(requestAddress)
                 if (rs.finalResult === true){
+                    console.log(rs)
                     if (rs.data.powerBanksList.length > 0) {
                         client.setBusy(true)
                         let connection = client.connection
