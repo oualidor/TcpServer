@@ -23,7 +23,6 @@ const SetAPNQueries = {
         let result = CMDs.SetAPN+ TCP_VERSION+ CheckSum + TCP_SESSIONS_TOKEN+index+ isValid+ MCCMNCLen+ MCCMNC+ APNLen+ APN+ UsernameLen+ Username+ PasswordLen+ Password
         let PackLen = dexToPackLen(result.length)
         result = PackLen+result;
-        console.log(result)
         return Buffer.from(result, "hex");
     },
     stationAnswer : (data) => {

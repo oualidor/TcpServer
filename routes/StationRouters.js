@@ -48,7 +48,6 @@ const StationRouters  = {
     rentPowerBank : async (req, res, clientsList) => {
         try {
             let { client, boxId} = req, minPowerAllowed = 2
-                console.log(boxId)
                 let requestAddress = BACKEND_SERVER+'Admin/Station/getRealTimeInfo/'+boxId
                 const rs = await HttpRequestHandler.GET(requestAddress)
                 if (rs.finalResult === true){
@@ -70,7 +69,7 @@ const StationRouters  = {
                                 res.send({finalResult: false, error: "could not send rent request"})
                             }
                         }else {
-                            res.send({finaResult: false, error: "no available power banks on station"})
+                            res.send({finaResult: false, error: "No power banks above the minimum charge level allowed"})
 
                         }
                     }

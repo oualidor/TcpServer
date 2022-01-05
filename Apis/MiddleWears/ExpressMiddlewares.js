@@ -5,7 +5,6 @@ const ExpressMiddlewares = {
         let {boxId} = req.params
         let client = await ConnectionOperations.getClientByBoxId(clientsList, boxId)
         if (client == false){
-            console.log(clientsList)
             res.send({finalResult: false, error: "Station not logged in"})
         }
         else{

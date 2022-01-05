@@ -96,7 +96,6 @@ class SocketServer extends EventEmitter{
                         newClient.setBusy(false)
                         this.addClient(newClient)
                         ConsoleMsgs.success("Client logged in successfully")
-                        console.log(clientsList)
                         return true
                     }else {
                         ConsoleMsgs.error("Could not send login answer to Station")
