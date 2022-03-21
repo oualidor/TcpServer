@@ -47,13 +47,13 @@ const StationRouters  = {
 
     rentPowerBank : async (req, res, clientsList) => {
         try {
-            let { client, boxId} = req, minPowerAllowed = 2
+            let { client, boxId} = req, minPowerAllowed = 4
                 let requestAddress = BACKEND_SERVER+'Admin/Station/getRealTimeInfo/'+boxId
                 const rs = await HttpRequestHandler.GET(requestAddress)
                 if (rs.finalResult === true){
                     let powerBanksList = rs['result']['powerBanksList'];
                     if (powerBanksList.length > 0){
-                        let allowed= []
+                        let allowed = []
                         powerBanksList.forEach(powerBank =>{
                             if(parseInt(powerBank['powerLevel']) >= minPowerAllowed){
                                 allowed.push(powerBank["slot"])

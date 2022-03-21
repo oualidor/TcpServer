@@ -25,11 +25,11 @@ async function answerPowerBankReturn(clientsList, connection, stationRequest, re
                 let url = BACKEND_SERVER + 'Admin/Station/returnPowerBank/'
                 let reqData = {
                     "stationId": currentClient.boxId,
-                    "clientId": "0",
                     "powerBankId": stationRequest.powerBankId
                 }
                 let rs = await HttpRequestHandler.POST(url, reqData)
-                if (rs.finalResult == true) {
+                if (rs.finalResult == true){
+
                 }else {
                     //TODO Write heavy log
                     ConsoleMsgs.error(JSON.stringify(rs))
