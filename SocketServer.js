@@ -109,13 +109,13 @@ class SocketServer extends EventEmitter{
             } else {
                 console.log(rs)
                 ConsoleMsgs.error("Refusing station login due an error while communication with back end")
-                let answer = LoginAnswer("0008", "01", '01', '11223344', "00")
+                let answer = LoginQueries.serverAnswer("01", "00")
                 connection.write(Buffer.from(answer, 'hex'))
                 return false
             }
         }catch (error) {
             ConsoleMsgs.error("Refusing station login due an error")
-            let answer = LoginAnswer("0008", "01", '01', '11223344', "00")
+            let answer = LoginQueries.serverAnswer("01", "00")
             connection.write(Buffer.from(answer, 'hex'))
             return false
         }
