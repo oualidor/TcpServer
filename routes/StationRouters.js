@@ -45,36 +45,55 @@ const StationRouters  = {
         }
     },
 
-    rentPowerBank : async (req, res, clientsList) => {
+    rentPowerBank : async (req, res, clientsList, allowUnCharged) => {
         try {
             let { client, boxId} = req, minPowerAllowed = 4
                 let requestAddress = BACKEND_SERVER+'Admin/Station/getRealTimeInfo/'+boxId
                 const rs = await HttpRequestHandler.GET(requestAddress)
                 if (rs.finalResult === true){
                     let powerBanksList = rs['result']['powerBanksList'];
-                    if (powerBanksList.length > 0){
-                        let allowed = []
-                        powerBanksList.forEach(powerBank =>{
-                            if(parseInt(powerBank['powerLevel']) >= minPowerAllowed){
-                                allowed.push(powerBank["slot"])
-                            }
-                        })
-                        if(allowed.length > 0){
-                            client.setBusy(true)
-                            let connection = client.connection
-                            if (connection.write(RentPowerBankQueries.serverRequest("0008", "01", "8a", "11223344", allowed[0]))) {
-                                ConnectionEvents.ServerFirst(clientsList, client, res)
-                            } else {
-                                client.setBusy(false)
-                                res.send({finalResult: false, error: "could not send rent request"})
-                            }
-                        }else {
-                            res.send({finaResult: false, error: "No power banks above the minimum charge level allowed"})
-
+                    if(allowUnCharged){
+                        client.setBusy(true)
+                        let connection = client.connection
+                        if (connection.write(RentPowerBankQueries.serverRequest(
+                            "0008",
+                            "01",
+                            "8a",
+                            "11223344",
+                            powerBanksList[0]['slot']
+                        ))) {
+                            ConnectionEvents.ServerFirst(clientsList, client, res)
+                        } else {
+                            client.setBusy(false)
+                            res.send({finalResult: false, error: "could not send rent request"})
                         }
                     }
                     else {
-                        res.send({finaResult: false, error: "no available power banks on station"})
+
+                        if (powerBanksList.length > 0){
+                            let allowed = []
+                            powerBanksList.forEach(powerBank =>{
+                                if(parseInt(powerBank['powerLevel']) >= minPowerAllowed){
+                                    allowed.push(powerBank["slot"])
+                                }
+                            })
+                            if(allowed.length > 0){
+                                client.setBusy(true)
+                                let connection = client.connection
+                                if (connection.write(RentPowerBankQueries.serverRequest("0008", "01", "8a", "11223344", allowed[0]))) {
+                                    ConnectionEvents.ServerFirst(clientsList, client, res)
+                                } else {
+                                    client.setBusy(false)
+                                    res.send({finalResult: false, error: "could not send rent request"})
+                                }
+                            }else {
+                                res.send({finaResult: false, error: "No power banks above the minimum charge level allowed"})
+
+                            }
+                        }
+                        else {
+                            res.send({finaResult: false, error: "no available power banks on station"})
+                        }
                     }
                 }
                 else {
