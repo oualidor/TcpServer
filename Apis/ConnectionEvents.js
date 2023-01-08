@@ -68,6 +68,7 @@ const ConnectionEvents = {
                     }
                 }
                 catch (error){
+                    console.log(error)
                     client.setBusy(false)
                     res.send({finalResult: false, error: "intern error"})
                     ConnectionEvents.General(clientsList, connection)
