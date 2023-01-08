@@ -19,7 +19,7 @@ const SlotEjectQueries = {
 
 
 
-module.exports = {SlotEjectQueries}
+module.exports = SlotEjectQueries
 
 
 
