@@ -59,6 +59,11 @@ class ExpressServer extends EventEmitter {
         (req, res, next) =>ExpressMiddlewares.StationLoginValidator(this.clientsList, req, res, next),
         async (req, res)=>{await StationRouters.rentPowerBank(req, res, this.clientsList, true)})
 
+
+    this.app.get("/Station/ejectSlot/:boxId/:slotNumber",
+        (req, res, next) =>ExpressMiddlewares.StationLoginValidator(this.clientsList, req, res, next),
+        async (req, res)=>{await StationRouters.ejectSlot(req, res, this.clientsList)})
+
     this.app.get(
         "/Station/QueryAPN/:boxId/:APNIndex",
         (req, res, next) =>ExpressMiddlewares.StationLoginValidator(this.clientsList, req, res, next),

@@ -7,6 +7,7 @@ const CMDs= require("./CMDs");
 const ConsoleMsgs = require("./ConsoleMsgs");
 const RequestEvents = require("./RequestEvents");
 const PowerBanksInfoQueries = require("../Structures/PowerBanksInfoQueries");
+const {SlotEject} = require("../Structures/SlotEjectQueries");
 
 const ConnectionEvents = {
     General : (clientsList, connection) =>{
@@ -54,6 +55,11 @@ const ConnectionEvents = {
                             break;
                         case CMDs.SetVoice:
                             res.send({finalResult: true, data: SetVoiceQueries.stationAnswer(data)})
+                            client.setBusy(false)
+                            ConnectionEvents.General(clientsList, connection)
+                            break;
+                        case CMDs.SlotEject:
+                            res.send({finalResult: true, data: SlotEject.StationAnswer(data)})
                             client.setBusy(false)
                             ConnectionEvents.General(clientsList, connection)
                             break;

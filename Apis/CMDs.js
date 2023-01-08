@@ -8,7 +8,8 @@ const CMDs =  {
     ReturnPowerBank : "66",
     SetAPN : "73",
     QueryAPN : "74",
-    SetVoice: "70"
+    SetVoice: "70",
+    SlotEject: "80",
 }
 
 

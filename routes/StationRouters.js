@@ -7,6 +7,8 @@ const {BACKEND_SERVER} = require("../Apis/Config");
 const {HttpRequestHandler} = require("../Apis/HttpRequestHandler");
 const PowerBanksInfoQueries = require("../Structures/PowerBanksInfoQueries");
 const e = require("express");
+const {SlotEject} = require("../Structures/SlotEjectQueries");
+const SlotEjectQueries = require("../Structures/SetServerQueries");
 
 const StationRouters  = {
     SetServer : async (req, res, clientsList) => {
@@ -106,6 +108,32 @@ const StationRouters  = {
             res.send({finaResult: false, error: "could not query station for info"})
         }
     },
+
+
+    ejectSlot : async (req, res, clientsList) => {
+        let { client, boxId, slotNumber} = req
+        try {
+                client.setBusy(true)
+                let connection = client.connection
+                if (connection.write(SlotEjectQueries.serverRequest(
+                    "0008",
+                    "01",
+                    "8a",
+                    "11223344",
+                    '0'+slotNumber.toString()
+                ))) {
+                    ConnectionEvents.ServerFirst(clientsList, client, res)
+                } else {
+                    client.setBusy(false)
+                    res.send({finalResult: false, error: "could not send eject slot request"})
+                }
+        } catch (error) {
+            console.log(error)
+            client.setBusy(false)
+            res.send({finaResult: false, error: "could not query station for info"})
+        }
+    },
+
 
     QueryAPN :  async (req, res, clientsList) => {
         try {
