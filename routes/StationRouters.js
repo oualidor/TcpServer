@@ -111,7 +111,8 @@ const StationRouters  = {
 
 
     ejectSlot : async (req, res, clientsList) => {
-        let { client, boxId, slotNumber }  = req
+        let { client }  = req
+        let { boxId, slotNumber }  = req.params
         console.log('*****************')
         console.log(slotNumber)
         try {
