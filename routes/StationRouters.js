@@ -111,7 +111,9 @@ const StationRouters  = {
 
 
     ejectSlot : async (req, res, clientsList) => {
-        let { client, boxId, slotNumber} = req
+        let { client, boxId, slotNumber }  = req
+        console.log('*****************')
+        console.log(slotNumber)
         try {
                 client.setBusy(true)
                 let connection = client.connection
