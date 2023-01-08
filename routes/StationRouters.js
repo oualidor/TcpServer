@@ -7,8 +7,8 @@ const {BACKEND_SERVER} = require("../Apis/Config");
 const {HttpRequestHandler} = require("../Apis/HttpRequestHandler");
 const PowerBanksInfoQueries = require("../Structures/PowerBanksInfoQueries");
 const e = require("express");
-const {SlotEject} = require("../Structures/SlotEjectQueries");
-const SlotEjectQueries = require("../Structures/SetServerQueries");
+const {SlotEject, SlotEjectQueries} = require("../Structures/SlotEjectQueries");
+
 
 const StationRouters  = {
     SetServer : async (req, res, clientsList) => {
